@@ -1,3 +1,5 @@
+# Buy ice tray V4 here: https://discord.gg/icetray
+
 Jailbreak:
     Player:
         -  Utils:
