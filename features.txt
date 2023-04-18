@@ -1,0 +1,249 @@
+Jailbreak:
+    Player:
+        -  Utils:
+            - Anti Ragdoll
+            - Anti Skydive
+            - Anti Paraglide
+            - Anti Falldamage
+            - Anti Taze
+            - Jesus
+            - Choose Spawn
+            - Allow Equip On Duck
+            - Allow Equip While Flying
+            - Allow Equip With Items
+        -  Misc:
+            - FOV Change
+            - Give Glider
+            - Glider On Key
+            - Parachute On Key
+            - 1 Way Noclip
+            - Infinite Duck
+            - Infinite Punch
+            - Infinite Jump
+            - Always Sprint
+            - Always Punch
+            - Always Duck
+            - Automatic Respawn On Stunned
+    Combat:
+        - Gun Mods:
+            - Automatic Fire
+            - No Recoil
+            - Anti Knockback
+            - Instant Reload
+                - Automatic Fix Robbery Bag
+            - Anti Scope UI
+        - Gun Store:
+            - Open Gunstore UI
+            - Equip Owned Guns
+            - Equip Guns
+            - Always Equip Owned Guns
+            - Spam Drop Items
+        - Silent Aim:
+            - Master Switch
+            - FOV Target Select
+            - Movement Prediction
+            - Extended Aimbot Range
+            - Allow Taser Aimbot
+            - Allow Target Prisoner
+            - Allow Target NPCs
+            - Allow Target Boss
+                - Shoot Head Only
+            - No Wall Penetration
+        - Arrest Aura:
+            - Master Switch
+            - Range
+            - Ignore While Driving
+            - Automatic Equip Handcuffs
+            - Automatic Eject Player
+            - Allow Tase Target
+            - Allow Through Walls
+            - Talk on Arrest
+    Vehicle:
+        - Car Modifications:
+              - Speed
+              - Brakes
+              - Turn Speed
+              - Height
+              - Infinite Nitro
+              - Automatic Flip Vehicle
+              - Spam Headlights
+              - Spam Jeep Roof
+              - Always Drift
+        - Heli Modifications:
+              - Master Switch
+              - Speed
+              - Instant Heli Height
+              - Instant Drone Height
+              - Instant Rope
+              - Extended Rope
+        - Plane Modifications:
+              - Speed
+              - Anti Max Height
+              - Automatic Jet Heat Seak
+        - Bike Modifications:
+              - Speed
+              - Dirt Bike Height
+        - Boat Modifications:
+              - Speed
+              - Boat On Land
+        - Misc:
+              - Anti Break Vehicle
+              - Anchor Vehicle On High Speed
+              - No Semitruck Trailer
+              - Vehicle Jump
+              - Automatic Hijack Vehicles
+              - Automatic Lock Vehicle
+              - Automatic Eject Passengers
+              - Destroy All Destructibles
+              - Allow Equip In Vehicle
+              - Hide Name In Vehicle
+              - Show Hotbar In Vehicle
+    Misc:
+        - Waypoints
+        - Misc:
+            - Always Keycard
+            - Open All Doors
+            - No Equip Cooldown
+            - No Circle Delay
+            - Colorful Bullets
+            - Infinite Jetpack Fuel
+            - Never Unload World
+            - Open Secretbases
+            - Automatic Accept Battle
+            - Automatic Start Matchmaking
+            - Click Lightning
+            - Click Nuke
+            - Teleport Football To Goal (Instant Soccer Challenge: https://jailbreak.fandom.com/wiki/Soccer_Ball_Challenge)
+            - Open Security Cameras
+            - Remove Clothing
+            - Give Police Clothing
+            - Give Police Hat
+        - Prison:
+            - Automatic Punch Electric Gate
+            - Automatic Open Prison Gate
+            - Automatic Explode Wall
+            - Automatic Lift Gate
+            - Automatic Open Cells
+        - Break Nearby Vehicles:
+            - Master Switch
+            - Only On Weapon Equipped
+            - Instant Break
+            - Target Enemy Team Only
+        - Pickpocket Aura:
+            - Master Switch
+            - Range
+        - Eject Aura:
+            - Master Switch
+            - Range
+        - Breakout Aura:
+            - Master Switch
+            - Range
+        - Pit Aura:
+            - Master Switch
+            - Range
+        - Dropped Cash Aura:
+            - Master Switch
+            - Range
+        - Play Sounds:
+            - list of sounds everyone can hear... (there are too many)
+            - Annoy Server
+        - Fortnite Mode:
+            - Master Switch
+            - Speed
+        - Disablers:
+            - Disable Lasers
+            - Disable Cameras
+            - Disable Minimap Flash
+            - Disable Automatic Unparachute
+            - Disable Military Turrets
+            - Disable Home Turrets
+            - Disable Smoke Grenade Effect
+    Markers (jailbreak "esp"):
+        - Master Switch
+        Teams:
+            - Criminal
+            - Prisoner
+            - Police
+        Objects:
+            - Airdrop
+            - Football
+            - NPCs
+        Settings:
+            - No Robbery Delay
+            - Mark Bounty Criminals
+    Robbery:
+        NOTE: These features are not Auto Rob.. Auto Rob will be released sometime in the future!
+        Bank:
+            - Robbery Status
+            - Automatic Touch Vault
+            - Automatic Place Dynamite
+        Bank Truck:
+            - Robbery Status
+        Jewelry:
+            - Robbery Status
+            - Automatic Punch Boxes
+            - Automatic Grab Nearby Jewels
+        Museum:
+            - Robbery Status
+            - Automatic Resolve Puzzle
+            - Automatic Place Dynamite
+            - Automatic Fill Bag
+            - Break Museum Puzzle
+        Casino:
+            - Robbery Status
+            - Automatic Crack Vault
+            - Automatic Collect Loot
+            - Automatic Open Door
+            - Break Elevator
+            - Hack Nearby Computers
+            - Reveal Keycode
+            - Call Elevator To Floor
+        Airdrop:
+            - Robbery Status
+            - Break NPCs
+        Cargo Plane:
+            - Robbery Status
+            - Automatic Inspect Crate
+            - Automatic Open Door
+            - Call Cargoplane
+        Mansion:
+            - Robbery Status
+            - Automatic Elevator Entry
+                - Allow On Police Team
+            - Anti Boss Attack
+            - Anti Boss Ragdoll
+            - Break NPCs
+            - Disable Traps
+        Trains:
+            - Robbery Status
+            - Automatic Fill Bag
+            - Automatic Delivery
+            - Automatic Breach Vault
+            - Anti Station Stop
+        Powerplant:
+            - Robbery Status
+            - Automatic Resolve Puzzle
+            - Disable Piston Damage
+            - Disable Powerwire Damage
+        Tomb:
+            - Robbery Status
+            - Automatic Resolve Dart Room
+            - Disable Darts
+            - Disable Wood Damage
+            - Disable Spike Damage
+            - Disable Lava Damage
+        Cargoship:
+            - Robbery Status
+            - Disable Turrets
+        Small Stores:
+            - Robbery Status
+    Info:
+       - credits
+       - Hide UI Username
+       - Save UI Status
+       - Change UI Toggle Keybind
+       - Lighting Technology
+Phantom Forces:
+    - soon
+
+more soonTM..
