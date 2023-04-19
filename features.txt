@@ -2,14 +2,16 @@
 
 Jailbreak:
     Player:
+        -  Walk Speed
+        -  Jump Power
         -  Utils:
+            - Choose Spawn
             - Anti Ragdoll
             - Anti Skydive
             - Anti Paraglide
             - Anti Falldamage
             - Anti Taze
             - Jesus
-            - Choose Spawn
             - Allow Equip On Duck
             - Allow Equip While Flying
             - Allow Equip With Items
@@ -31,6 +33,7 @@ Jailbreak:
             - Automatic Fire
             - No Recoil
             - Anti Knockback
+            - Wallbang
             - Instant Reload
                 - Automatic Fix Robbery Bag
             - Anti Scope UI
