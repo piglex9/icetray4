@@ -37,9 +37,9 @@ Jailbreak:
             - Instant Reload
                 - Automatic Fix Robbery Bag
             - Anti Scope UI
-        - Kill All:
+        - Kill All (new):
             - Master Switch
-            - Attempt Fling Walking Targets (semi-working)
+            - Attempt Fling Walking Targets
             - Ignore Teammates
         - Gun Store:
             - Open Gunstore UI
