@@ -37,6 +37,10 @@ Jailbreak:
             - Instant Reload
                 - Automatic Fix Robbery Bag
             - Anti Scope UI
+        - Kill All:
+            - Master Switch
+            - Attempt Fling Walking Targets
+            - Ignore Teammates
         - Gun Store:
             - Open Gunstore UI
             - Equip Owned Guns
@@ -77,6 +81,7 @@ Jailbreak:
         - Heli Modifications:
               - Master Switch
               - Speed
+              - Rope Length
               - Instant Heli Height
               - Instant Drone Height
               - Instant Rope
