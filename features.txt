@@ -39,7 +39,7 @@ Jailbreak:
             - Anti Scope UI
         - Kill All:
             - Master Switch
-            - Attempt Fling Walking Targets
+            - Attempt Fling Walking Targets (semi-working)
             - Ignore Teammates
         - Gun Store:
             - Open Gunstore UI
