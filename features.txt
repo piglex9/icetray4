@@ -37,7 +37,7 @@ Jailbreak:
             - Instant Reload
                 - Automatic Fix Robbery Bag
             - Anti Scope UI
-        - Kill All (new):
+        - Kill All:
             - Master Switch
             - Attempt Fling Walking Targets
             - Ignore Teammates
@@ -160,6 +160,15 @@ Jailbreak:
         - Fortnite Mode:
             - Master Switch
             - Speed
+        - Freeze Players:
+            - Master Switch
+            - Freeze All
+            - Freeze Nearby Players
+            - Ignore Teammates
+        - C4 Dick (Serversided):
+            - Master Switch
+            - Spawn Dick
+            - Spawn Dick On Player
         - Disablers:
             - Disable Lasers
             - Disable Cameras
