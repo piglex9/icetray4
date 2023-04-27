@@ -2,267 +2,281 @@
 
 Jailbreak:
     Player:
-        -  Walk Speed
-        -  Jump Power
+        -  Walk Speed: self explanatory
+            - Value
+            - Disable If Handcuffed: sets speed to 0 when handcuffed
+        -  Jump Power: self explanatory
+            - Value
+            - Disable If Handcuffed: sets jumppower to 50 when handcuffed
         -  Utils:
-            - Choose Spawn
-            - Anti Ragdoll
-            - Anti Skydive
-            - Anti Paraglide
-            - Anti Falldamage
-            - Anti Taze
-            - Jesus
-            - Allow Equip On Duck
-            - Allow Equip While Flying
-            - Allow Equip With Items
+            - Choose Spawn: kills your character to receive "choose spawn" gui (this will not work on prisoner team)
+            - Anti Ragdoll: disables ragdoll
+            - Anti Skydive: disables skydiving
+            - Anti Parachute: disables parachuting
+            - Anti Falldamage: disables falldamage
+            - Anti Taze: disables tazes
+            - Jesus: allows you to walk and drive on water
+            - Allow Equip On Duck: allows you to equip items while crawling
+            - Allow Equip While Flying: allows you to equip items while flying a jetpack
+            - Allow Equip With Items: allows you to equip items when not allowed to
         -  Misc:
-            - FOV Change
-            - Give Glider
-            - Glider On Key
-            - Parachute On Key
-            - 1 Way Noclip
-            - Infinite Duck
-            - Infinite Punch
-            - Infinite Jump
-            - Always Sprint
-            - Always Punch
-            - Always Duck
-            - Automatic Respawn On Stunned
+            - FOV: changes field of view
+            - Give Glider: equips a glider in inventory
+            - Glider On Key: equips and opens glider on key
+            - Parachute On Key: open parachute on key (this will not work when anti parachute is enabled)
+            - 1 Way Noclip: attempts to teleport you through walls when not having anything over your head on key
+            - Infinite Duck: allows you to infinitely duck
+            - Infinite Punch: allows you to punch faster
+            - Infinite Jump: allows you to hold space bar to jump
+            - Always Sprint: self explanatory
+            - Always Punch: self explanatory
+            - Always Duck: spams crawling key
+            - Automatic Respawn On Stunned: instantly change teams when tazed or c4 explodes (could be useful for legit cheating)
     Combat:
         - Gun Mods:
-            - Automatic Fire
-            - No Recoil
-            - Anti Knockback
-            - Wallbang
-            - Instant Reload
-                - Automatic Fix Robbery Bag
-            - Anti Scope UI
-        - Kill All:
-            - Master Switch
-            - Attempt Fling Walking Targets
-            - Ignore Teammates
+            - Automatic Fire: makes your weapon automatic
+            - No Recoil: removes recoil from weapons
+            - Anti Knockback: removes knockback when shooting a flintlock
+            - Wallbang: allows you to shoot through walls
+            - Instant Reload: attempts to instantly reload your weapon
+                - Automatic Fix Robbery Bag: attempts to pick up the dropped weapon on instant reload to fix jailbreak's dumb way of registering items when robbing
+            - Anti Scope UI: disables scope overlay on sniper
         - Gun Store:
-            - Open Gunstore UI
-            - Equip Owned Guns
-            - Equip Guns
-            - Always Equip Owned Guns
-            - Spam Drop Items
+            - Open Gunstore UI: opens gun store ui
+            - Equip Owned Guns: equips all owned guns
+            - Equip Guns: manually equip owned guns
+            - Always Equip Owned Guns: always equips all owned guns when not having them
+            - Spam Drop Items: spam drops owned guns
+        - Kill All (you have to be in a helicopter to use this):
+            - Master Switch: attempts to kill everyone in a vehicle by teleporting them to lava
+            - Attempt Fling Walking Targets: attempts to fling targets that are not in a vehicle
+            - Ignore Teammates: self explanatory
         - Silent Aim:
-            - Master Switch
-            - FOV Target Select
+            - Master Switch: enables silent aim
+            - FOV Target Select: enables fov target selection
+                 - FOV Value: self explanatory
+                 - FOV Circle: enables fov circle
             - Movement Prediction
-            - Extended Aimbot Range
-            - Allow Taser Aimbot
-            - Allow Target Prisoner
-            - Allow Target NPCs
-            - Allow Target Boss
-                - Shoot Head Only
-            - No Wall Penetration
+                 - Prediction Value: seconds for aimbot to predict
+            - Extended Aimbot Range: slightly extends aimbot range
+            - Allow Taser Aimbot: allows aimbot to work on taser 
+            - Allow Target Prisoner: allows aimbot to target prisoners
+            - Allow Target NPCs: allows aimbot to target npcs
+            - Allow Target Boss: allows aimbot to target boss from mansion robbery
+                - Head Only: allows aimbot to only shoot head to cause more damage
+            - No Wall Penetration: allows aimbot to not target anyone behind walls
         - Arrest Aura:
-            - Master Switch
-            - Range
-            - Ignore While Driving
-            - Automatic Equip Handcuffs
-            - Automatic Eject Player
-            - Allow Tase Target
-            - Allow Through Walls
-            - Talk on Arrest
+            - Master Switch: enables arrest aura
+            - Range: self explanatory
+            - Ignore While Driving: ignore targets in range while driving a vehicle
+            - Automatic Equip Handcuffs: automatically equips handcuffs when target is in range
+            - Automatic Eject Player: automatically ejects targets out of vehicle
+            - Allow Tase Target: allows arrest aura to tase targets
+            - Allow Through Walls: allows arrest aura to arrest targets behind walls
+            - Talk on Arrest: automatically trash talks when arresting a target
     Vehicle:
         - Car Modifications:
-              - Speed
-              - Brakes
-              - Turn Speed
-              - Height
-              - Infinite Nitro
-              - Automatic Flip Vehicle
-              - Spam Headlights
-              - Spam Jeep Roof
-              - Always Drift
+              - Master Switch: enables car modifications
+              - Speed: modifies speed
+              - Brakes: modifies brakes
+              - Turn Speed: modifies turn speed
+              - Height: modifies height
+              - Infinite Nitro: self explanatory
+              - Automatic Flip Vehicle: automatically flips vehicle
+              - Spam Headlights: spams vehicle headlights
+              - Spam Jeep Roof: spams roof when driving a jeep
+              - Always Drift: always be drifting
         - Heli Modifications:
-              - Master Switch
-              - Speed
-              - Rope Length
-              - Instant Heli Height
-              - Instant Drone Height
-              - Instant Rope
-              - Extended Rope
+              - Master Switch: enables heli modifications
+              - Speed: modifies speed
+              - Rope Length: modifies length of rope
+              - Infinite Heli Height: allows you to fly as high as you want with a helicopter
+              - Infinite Drone Height: allows you to fly as high as you want with a drone
+              - Instant Rope: allows you to instantly pick up what the rope touches
+              - Extended Rope: slightly extends your rope and instantly picks up anything nearby the rope
         - Plane Modifications:
-              - Speed
-              - Anti Max Height
-              - Automatic Jet Heat Seak
+              - Master Switch: enables plane modifications
+              - Speed: modifies speed
+              - Anti Max Height: allows you to fly as high as you want with a plane
+              - Automatic Jet Heat Seak: automatically lock on to targets when flying a jet
         - Bike Modifications:
-              - Speed
-              - Dirt Bike Height
+              - Master Switch: enables bike modifications
+              - Speed: modifies speed
+              - Dirt Bike Height: modifies dirt bike height
+                    - Value: self explanatory
         - Boat Modifications:
-              - Speed
-              - Boat On Land
+              - Master Switch: enables boat modifications
+              - Speed: modifies speed
+              - Boat On Land: allows you to use boats on land
         - Misc:
-              - Anti Break Vehicle
-              - Anchor Vehicle On High Speed
-              - No Semitruck Trailer
-              - Vehicle Jump
-              - Automatic Hijack Vehicles
-              - Automatic Lock Vehicle
-              - Automatic Eject Passengers
-              - Destroy All Destructibles
-              - Allow Equip In Vehicle
-              - Hide Name In Vehicle
-              - Show Hotbar In Vehicle
+              - Anti Break Vehicle: allows your vehicle to never break
+              - No Semitruck Trailer: removes the trailer when driving a semitruck
+              - Vehicle Jump: allows you to jump while in a vehicle
+              - Automatic Hijack Vehicles: automatically hijacks all vehicles on the map
+              - Automatic Lock Vehicle: automatically locks vehicle when not locked
+              - Automatic Eject Passengers: automatically ejects all passengers out of the vehicle
+              - Destroy All Destructibles: destroys all destructibles on the map
+                    - Destruct Delay: delay of destruction
+              - Hide Name In Vehicle: hides your name when driving a vehicle
+              - Show Hotbar In Vehicle: unhides the showbar when driving
     Misc:
-        - Waypoints
+        - Waypoints: choose waypoints to set to important locations around the map (useful if you're new to jailbreak i guess?)
         - Misc:
-            - Always Keycard
-            - Open All Doors
-            - No Equip Cooldown
-            - No Circle Delay
-            - Colorful Bullets
-            - Infinite Jetpack Fuel
-            - Never Unload World
-            - Open Secretbases
-            - Automatic Accept Battle
-            - Automatic Start Matchmaking
-            - Click Lightning
-            - Click Nuke
-            - Teleport Football To Goal (Instant Soccer Challenge: https://jailbreak.fandom.com/wiki/Soccer_Ball_Challenge)
-            - Open Security Cameras
-            - Remove Clothing
-            - Give Police Clothing
-            - Give Police Hat
+            - Always Keycard: always have a hidden keycard to be able to open doors that usually require a keycard
+            - Open All Doors: opens all doors around map
+            - No Equip Condtions: removes every conditions on equip
+            - No Circle Delay: removes most of "E" circles with duration
+            - Colorful Bullets: colorful bullets
+            - Infinite Jetpack Fuel: infinite fuel when flying a jetpack
+            - Never Unload World: never unloads world
+            - Open Secretbases: opens all secret bases
+            - Automatic Accept Battle: automatically accept a battle when clan is ready
+            - Automatic Start Matchmaking: automatically start a matchmaking if you're the clan admin
+            - Click Lightning: spawn lightning on click
+            - Click Nuke: spawn nuke on click
+            - Teleport Football To Goal: read this wiki if you're interested >> https://jailbreak.fandom.com/wiki/Soccer_Ball_Challenge
+            - Open Security Cameras: opens security cameras
+            - Remove Clothing: resets your clothing to default
+            - Give Police Clothing: sets your clothing to police
+            - Give Police Hat: sets a police hat on your head
         - Prison:
-            - Automatic Punch Electric Gate
-            - Automatic Open Prison Gate
-            - Automatic Explode Wall
-            - Automatic Lift Gate
-            - Automatic Open Cells
-        - Break Nearby Vehicles:
-            - Master Switch
-            - Only On Weapon Equipped
-            - Instant Break
-            - Target Enemy Team Only
-        - Pickpocket Aura:
-            - Master Switch
-            - Range
-        - Eject Aura:
-            - Master Switch
-            - Range
-        - Breakout Aura:
-            - Master Switch
-            - Range
-        - Pit Aura:
-            - Master Switch
-            - Range
-        - Dropped Cash Aura:
-            - Master Switch
-            - Range
-        - Play Sounds:
+            - Automatic Punch Electric Gate: automatically punches prison electric gate
+            - Automatic Open Prison Gate: automatically opens all main prison gates 
+            - Automatic Explode Wall: automatically explodes prison wall
+            - Automatic Lift Gate: automatically lifts that one gate
+            - Automatic Open Cells: automatically opens all cells
+        - Break Nearby Vehicles: 
+            - Master Switch: enables break nearby vehicles
+            - Only On Weapon Equipped: only break nearby vehicles when weapon is equipped
+            - Instant Break: tricks the game into thinking you're using a sniper
+            - Ignore Teammates: self explanatory
+        - Pickpocket Aura: pickpockets nearby police
+            - Master Switch: enables pickpocket aura
+            - Range: self explanatory
+        - Eject Aura: ejects nearby criminals out of vehicle
+            - Master Switch: enables eject aura
+            - Range: self explanatory
+        - Breakout Aura: breakouts nearby teammates out of handcuffs (works every 20 seconds)
+            - Master Switch: enables breakout aura
+            - Range: self explanatory
+        - Pit Aura: touches nearby targets cars when driving to make their tires pop
+            - Master Switch: enables pit aura
+            - Range: self explanatory
+        - Dropped Cash Aura: collects nearby dropped cash
+            - Master Switch: enables dropped cash aura
+            - Range: self explanatory
+        - Play Sounds: plays sounds that anyone nearby you can hear
             - list of sounds everyone can hear... (there are too many)
-            - Annoy Server
-        - Fortnite Mode:
-            - Master Switch
-            - Speed
-        - Freeze Players:
-            - Master Switch
-            - Freeze All
-            - Freeze Nearby Players
-            - Ignore Teammates
-        - C4 Dick (Serversided):
-            - Master Switch
-            - Spawn Dick
-            - Spawn Dick On Player
+            - Annoy Server: plays horn sound every second
+        - Fortnite Mode: enables orange justice dance from fortnite that everyone on the server can see
+            - Master Switch: enables fortnite mode
+            - Speed: modify dance speed
+            - Disable Fireworks: disable ui fireworks
+        - Freeze Players: attempts to freeze players and kill them if they try to move
+            - Master Switch: enables freeze players
+            - Freeze All: enables freeze all
+            - Freeze Nearby Players: enables freeze nearby players
+            - Move Camera To Target: watch targets get frozen in 4k
+            - Ignore Teammates: self explanatory
+        - C4 Dick: spawns a dick made out of c4s (image: https://imgur.com/a/xbxe7aP)
+            - Master Switch: enables c4 dick
+            - Spawn Dick: spawn a dick on yourself
+            - Spawn Dick On Player: spawn a dick on others
         - Disablers:
-            - Disable Lasers
-            - Disable Cameras
-            - Disable Minimap Flash
-            - Disable Automatic Unparachute
-            - Disable Military Turrets
-            - Disable Home Turrets
-            - Disable Smoke Grenade Effect
+            - Disable Lasers: disables lasers damage
+            - Disable Cameras: disables cameras damage
+            - Disable Minimap Flash: disables minimap flashes on enemy players
+            - Disable Automatic Unparachute: disables automatic unparachutes when you touch ground/etc..
+            - Disable Military Turrets: disables military turrets
+            - Disable Home Turrets: disables turrets placed in a home
+            - Disable Smoke Grenade Effect: disables smoke grenade effect
     Markers (jailbreak "esp"):
-        - Master Switch
+        - Master Switch: enables markers
         Teams:
-            - Criminal
-            - Prisoner
-            - Police
+            - Allow Criminal Marker: allows markers for criminals
+            - Allow Prisoner Marker: allows markers for prisoners
+            - Allow Police Marker: allows markers for police
         Objects:
-            - Airdrop
-            - Football
-            - NPCs
+            - Allow Airdrop Marker: allows markers for airdrops
+            - Allow Football Marker: allows markers for football
+            - Allow NPCs Marker: allows markers for npcs
         Settings:
-            - No Robbery Delay
-            - Mark Bounty Criminals
+            - No Robbery Marker Delay: no delay markers
+            - Mark Bounty Criminals: markers criminals with a bounty different color
     Robbery:
         NOTE: These features are not Auto Rob.. Auto Rob will be released sometime in the future!
         Bank:
             - Robbery Status
-            - Automatic Touch Vault
-            - Automatic Place Dynamite
+            - Automatic Touch Vault: automatically touches vault when starting robbery
+            - Automatic Place Dynamite: automatically places dynamite when nearby bank
         Bank Truck:
             - Robbery Status
         Jewelry:
             - Robbery Status
-            - Automatic Punch Boxes
-            - Automatic Grab Nearby Jewels
+            - Automatic Punch Boxes: automatically punches jewelry boxes
+            - Automatic Grab Nearby Jewels: automatically grabs nearby jewels
         Museum:
             - Robbery Status
-            - Automatic Resolve Puzzle
-            - Automatic Place Dynamite
-            - Automatic Fill Bag
-            - Break Museum Puzzle
+            - Automatic Resolve Puzzle: automatically resolves museum puzzle
+            - Automatic Place Dynamite: automatically places dynamite if someone else already did
+            - Automatic Fill Bag: automatically fills bag when in center of museum
+            - Break Museum Puzzle: randomizes museum puzzle to make it annyoing for others
         Casino:
             - Robbery Status
-            - Automatic Crack Vault
-            - Automatic Collect Loot
-            - Automatic Open Door
-            - Break Elevator
-            - Hack Nearby Computers
-            - Reveal Keycode
-            - Call Elevator To Floor
+            - Automatic Crack Vault: automatically cracks vault when nearby
+            - Automatic Collect Loot: automatically collects loot when nearby
+            - Automatic Open Door: automatically opens casino keycode door
+            - Break Elevator: breaks elevator to make the casino robbery "unrobbable"
+            - Hack Nearby Computers: automatically hacks computers nearby
+            - Reveal Keycode: send a notification with keycode
+            - Call Elevator To Floor: call elevator to floor
         Airdrop:
             - Robbery Status
-            - Break NPCs
+            - Break NPCs: make npcs not target you
         Cargo Plane:
             - Robbery Status
-            - Automatic Inspect Crate
-            - Automatic Open Door
-            - Call Cargoplane
+            - Automatic Inspect Crate: automatically inspect cargoplane crates
+            - Automatic Open Door: automatically open cargoplane door when crate is in hotbar
+            - Call Cargoplane: calls cargoplane if possible
         Mansion:
             - Robbery Status
-            - Automatic Elevator Entry
-                - Allow On Police Team
-            - Anti Boss Attack
-            - Anti Boss Ragdoll
-            - Break NPCs
-            - Disable Traps
+            - Automatic Elevator Entry: automatically entries elevator when nearby
+                - Allow On Police Team: allows automatic entry on police team
+            - Anti Boss Attack: disables boss attacks
+            - Anti Boss Ragdoll: disables boss ragdolls
+            - Break NPCs: make npcs not target you
+            - Disable Traps: disables mansion traps
         Trains:
             - Robbery Status
-            - Automatic Fill Bag
-            - Automatic Delivery
-            - Automatic Breach Vault
-            - Anti Station Stop
+            - Automatic Fill Bag: automatically fills bag when nearby trains and on criminal team
+            - Automatic Delivery: automatically deliveries when nearby trains and on police team
+            - Automatic Breach Vault: automatically breaches vault
+            - Anti Station Stop: attempts to put the train on the track where it does not stop at the station
         Powerplant:
             - Robbery Status
-            - Automatic Resolve Puzzle
-            - Disable Piston Damage
-            - Disable Powerwire Damage
+            - Automatic Resolve Puzzle: automatically resolves puzzle
+            - Disable Piston Damage: disables piston damage
+            - Disable Powerwire Damage: disables powerwire damage
         Tomb:
             - Robbery Status
-            - Automatic Resolve Dart Room
-            - Disable Darts
-            - Disable Wood Damage
-            - Disable Spike Damage
-            - Disable Lava Damage
+            - Automatic Resolve Dart Room: automatically resolves dart room to collect diamond (flying causes it for you to not be able to pickup diamond)
+            - Disable Darts: disables darts shooting
+            - Disable Wood Damage: disables wood damage
+            - Disable Spike Damage: disables spikes damage
+            - Disable Lava Damage: disables lava damage
         Cargoship:
             - Robbery Status
-            - Disable Turrets
+            - Disable Turrets: disables turrets
         Small Stores:
             - Robbery Status
     Info:
        - credits
-       - Hide UI Username
-       - Save UI Status
-       - Change UI Toggle Keybind
-       - Lighting Technology
+       - Hide UI Username: hides your discord name from UI
+       - Save UI Status: saves your latest UI status
+       - Change UI Toggle Keybind: change ui toggle keybind
+       - Lighting Technology: change lighting technology to try improve fps
 Phantom Forces:
     - soon
+Ro Ghoul: (?)
 
 more soonTM..
