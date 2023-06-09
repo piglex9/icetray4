@@ -28,6 +28,8 @@ Jailbreak:
             - Infinite Duck: allows you to infinitely duck
             - Infinite Punch: allows you to punch faster
             - Infinite Jump: allows you to hold space bar to jump
+            - Infinite Roll: allows you to roll faster
+            - Roll Duration: change roll duration
             - Always Sprint: self explanatory
             - Always Punch: self explanatory
             - Always Duck: spams crawling key
