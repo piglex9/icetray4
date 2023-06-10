@@ -28,9 +28,11 @@ Jailbreak:
             - Infinite Duck: allows you to infinitely duck
             - Infinite Punch: allows you to punch faster
             - Infinite Jump: allows you to hold space bar to jump
-            - Break Animation: rolls character
             - Infinite Roll: allows you to roll faster
+            - Break Roll Physics: no physics when rolling
+            - Freeze Roll: character does not move when rolling
             - Roll Duration: change roll duration
+            - Always Roll: self explanatory
             - Always Sprint: self explanatory
             - Always Punch: self explanatory
             - Always Duck: spams crawling key
