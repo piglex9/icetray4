@@ -146,9 +146,10 @@ Jailbreak:
             - Give Police Hat: sets a police hat on your head
         - Prison:
             - Automatic Punch Electric Gate: automatically punches prison electric gate
-            - Automatic Open Prison Gate: automatically opens all main prison gates 
-            - Automatic Explode Wall: automatically explodes prison wall
-            - Automatic Lift Gate: automatically lifts that one gate
+            - Automatic Open Front Gates: automatically opens both prison gates
+            - Automatic Open Yard Gates: automatically opens all gates in prison yard
+            - Automatic Open Side Gate: automatically opens gate from prison side
+            - Automatic Open Main Gate: automatically opens main prison gate
             - Automatic Open Cells: automatically opens all cells
         - Break Nearby Vehicles: 
             - Master Switch: enables break nearby vehicles
@@ -190,6 +191,7 @@ Jailbreak:
         - Disablers:
             - Disable Lasers: disables lasers damage
             - Disable Cameras: disables cameras damage
+            - Disable Spotlight Tracking: disables prison spotlight tracking
             - Disable Minimap Flash: disables minimap flashes on enemy players
             - Disable Automatic Unparachute: disables automatic unparachutes when you touch ground/etc..
             - Disable Military Turrets: disables military turrets
