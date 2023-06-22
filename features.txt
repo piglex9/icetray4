@@ -52,10 +52,12 @@ Jailbreak:
             - Equip Guns: manually equip owned guns
             - Always Equip Owned Guns: always equips all owned guns when not having them
             - Spam Drop Items: spam drops owned guns
-        - Kill All (you have to be in a helicopter to use this):
-            - Master Switch: attempts to kill everyone in a vehicle by teleporting them to lava
-            - Attempt Fling Walking Targets: attempts to fling targets that are not in a vehicle
+        - Kill All:
+            - Master Switch: enables kill all
+            - Move Camera To Target: watch target die
             - Ignore Teammates: self explanatory
+            - Ignore Vehicles: ignores targets in a vehicle
+            - Kill Player: kills specified target
         - Silent Aim:
             - Master Switch: enables silent aim
             - FOV Target Select: enables fov target selection
@@ -178,12 +180,6 @@ Jailbreak:
             - Master Switch: enables fortnite mode
             - Speed: modify dance speed
             - Disable Fireworks: disable ui fireworks
-        - Freeze Players: attempts to freeze players and kill them if they try to move
-            - Master Switch: enables freeze players
-            - Freeze All: enables freeze all
-            - Freeze Nearby Players: enables freeze nearby players
-            - Move Camera To Target: watch targets get frozen in 4k
-            - Ignore Teammates: self explanatory
         - C4 Dick: spawns a dick made out of c4s (image: https://imgur.com/a/xbxe7aP)
             - Master Switch: enables c4 dick
             - Spawn Dick: spawn a dick on yourself
