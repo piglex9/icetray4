@@ -1,4 +1,5 @@
-# Buy ice tray V4 here: https://discord.gg/icetray
+# Buy ice tray V4 here with PayPal & Crypto: https://icetray.mysellix.io
+# Buy ice tray V4 via a Reseller with Credit Card, Robux, PaySafeCard, etc.. on our Discord: https://discord.gg/icetray
 
 Jailbreak:
     Player:
@@ -21,7 +22,6 @@ Jailbreak:
             - Allow Equip With Items: allows you to equip items when not allowed to
         -  Misc:
             - FOV: changes field of view
-            - Give Glider: equips a glider in inventory
             - Glider On Key: equips and opens glider on key
             - Parachute On Key: open parachute on key (this will not work when anti parachute is enabled)
             - 1 Way Noclip: attempts to teleport you through walls when not having anything over your head on key
@@ -36,15 +36,19 @@ Jailbreak:
             - Always Sprint: self explanatory
             - Always Punch: self explanatory
             - Always Duck: spams crawling key
+            - Always Juiced: always have speed from energy drink
+            - Fortnite Mode: enables orange justice dance from fortnite that everyone on the server can see
+                - Animation Speed: modify dance speed
             - Automatic Respawn On Stunned: instantly change teams when tazed or c4 explodes (could be useful for legit cheating)
     Combat:
         - Gun Mods:
             - Automatic Fire: makes your weapon automatic
             - No Recoil: removes recoil from weapons
+            - No Spread: removes spread from weapons
             - Anti Knockback: removes knockback when shooting a flintlock
             - Wallbang: allows you to shoot through walls
             - Instant Reload: attempts to instantly reload your weapon
-                - Automatic Fix Robbery Bag: attempts to pick up the dropped weapon on instant reload to fix jailbreak's dumb way of registering items when robbing
+            - Instant Seek: instant seeking for rocket launcher
             - Anti Scope UI: disables scope overlay on sniper
         - Gun Store:
             - Open Gunstore UI: opens gun store ui
@@ -52,12 +56,11 @@ Jailbreak:
             - Equip Guns: manually equip owned guns
             - Always Equip Owned Guns: always equips all owned guns when not having them
             - Spam Drop Items: spam drops owned guns
-        - Kill All:
-            - Master Switch: enables kill all
-            - Move Camera To Target: watch target die
-            - Ignore Teammates: self explanatory
-            - Ignore Vehicles: ignores targets in a vehicle
-            - Kill Player: kills specified target
+                - Allow Projectiles: allows projectiles to be dropped
+        - Break Experience:
+            - Attempt Kill Player: attempts to kill a player by flinging them
+            - Teleport Locations: list of teleports to positions where targets in a vehicle get automatically kicked out and can even get killed
+            - Teleport Player: select target (This will not work on yourself.)
         - Silent Aim:
             - Master Switch: enables silent aim
             - FOV Target Select: enables fov target selection
@@ -105,7 +108,7 @@ Jailbreak:
               - Master Switch: enables plane modifications
               - Speed: modifies speed
               - Anti Max Height: allows you to fly as high as you want with a plane
-              - Automatic Jet Heat Seak: automatically lock on to targets when flying a jet
+              - Automatic Jet Heat Seek: automatically lock on to targets when flying a jet
         - Bike Modifications:
               - Master Switch: enables bike modifications
               - Speed: modifies speed
@@ -130,8 +133,7 @@ Jailbreak:
         - Waypoints: choose waypoints to set to important locations around the map (useful if you're new to jailbreak i guess?)
         - Misc:
             - Always Keycard: always have a hidden keycard to be able to open doors that usually require a keycard
-            - Open All Doors: opens all doors around map
-            - No Equip Condtions: removes every conditions on equip
+            - Open Nearby Doors: open all nearby doors
             - No Circle Delay: removes most of "E" circles with duration
             - Colorful Bullets: colorful bullets
             - Infinite Jetpack Fuel: infinite fuel when flying a jetpack
@@ -141,7 +143,7 @@ Jailbreak:
             - Automatic Start Matchmaking: automatically start a matchmaking if you're the clan admin
             - Click Lightning: spawn lightning on click
             - Click Nuke: spawn nuke on click
-            - Teleport Football To Goal: read this wiki if you're interested >> https://jailbreak.fandom.com/wiki/Soccer_Ball_Challenge
+            - Chat Spy: allows you to see private messages and enemy team chat
             - Open Security Cameras: opens security cameras
             - Remove Clothing: resets your clothing to default
             - Give Police Clothing: sets your clothing to police
@@ -158,32 +160,39 @@ Jailbreak:
             - Only On Weapon Equipped: only break nearby vehicles when weapon is equipped
             - Instant Break: tricks the game into thinking you're using a sniper
             - Ignore Teammates: self explanatory
-        - Pickpocket Aura: pickpockets nearby police
-            - Master Switch: enables pickpocket aura
-            - Range: self explanatory
-        - Eject Aura: ejects nearby criminals out of vehicle
-            - Master Switch: enables eject aura
-            - Range: self explanatory
-        - Breakout Aura: breakouts nearby teammates out of handcuffs (works every 20 seconds)
-            - Master Switch: enables breakout aura
-            - Range: self explanatory
-        - Pit Aura: touches nearby targets cars when driving to make their tires pop
-            - Master Switch: enables pit aura
-            - Range: self explanatory
-        - Dropped Cash Aura: collects nearby dropped cash
-            - Master Switch: enables dropped cash aura
-            - Range: self explanatory
-        - Play Sounds: plays sounds that anyone nearby you can hear
+        - Auras:
+            - Pickpocket Aura: pickpockets nearby police
+                - Master Switch: enables aura
+                - Range: self explanatory
+            - Eject Aura: ejects nearby criminals out of vehicle
+                - Master Switch: enables aura
+                - Range: self explanatory
+            - Breakout Aura: breakouts nearby teammates out of handcuffs (works every 20 seconds)
+                - Master Switch: enables aura
+                - Range: self explanatory
+            - Pit Aura: touches nearby targets cars when driving to make their tires pop
+                - Master Switch: enables aura
+                - Range: self explanatory
+            - Dropped Cash Aura: automatically collects nearby dropped cash
+                - Master Switch: enables aura
+                - Range: self explanatory
+        - Play Sounds: plays sounds that everyone nearby with sounds ON can hear
             - list of sounds everyone can hear... (there are too many)
             - Annoy Server: plays horn sound every second
-        - Fortnite Mode: enables orange justice dance from fortnite that everyone on the server can see
-            - Master Switch: enables fortnite mode
-            - Speed: modify dance speed
-            - Disable Fireworks: disable ui fireworks
+        - Rocket Fun:
+            - Rocket Trail: missiles always follow a target but never explodes (1K in game cash for every use)
+                - Spawn Rocket: automatically purchases a missile if needed and spawns it behind local player
+                - Spawn Rocket On: ^ but spawns on specified player
+            - Rocket Explosion: allows missile to instant explode and spawn explosion particles (no cash needed)
+                - Spawn Explosion: spawns explosion particles on local player
+                - Spawn Explosion On: spawns explosion particles on specified player
+                - Explosion Size: amount of missiles to use
         - C4 Dick: spawns a dick made out of c4s (image: https://imgur.com/a/xbxe7aP)
             - Master Switch: enables c4 dick
             - Spawn Dick: spawn a dick on yourself
-            - Spawn Dick On Player: spawn a dick on others
+            - Override Length: overrides length
+                - Dick Length: length of dick
+            - Spawn Dick On Player: spawns a dick on specified player
         - Disablers:
             - Disable Lasers: disables lasers damage
             - Disable Cameras: disables cameras damage
@@ -278,8 +287,5 @@ Jailbreak:
        - Save UI Status: saves your latest UI status
        - Change UI Toggle Keybind: change ui toggle keybind
        - Lighting Technology: change lighting technology to try improve fps
-Phantom Forces:
-    - soon
-Ro Ghoul: (?)
 
 more soonTM..
