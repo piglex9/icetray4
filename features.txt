@@ -45,10 +45,13 @@ Jailbreak:
             - Automatic Fire: makes your weapon automatic
             - No Recoil: removes recoil from weapons
             - No Spread: removes spread from weapons
-            - Anti Knockback: removes knockback when shooting a flintlock
             - Wallbang: allows you to shoot through walls
             - Instant Reload: attempts to instantly reload your weapon
             - Instant Seek: instant seeking for rocket launcher
+        - Misc:
+            - Quick Fire: allows you to hold mouse1 to shoot
+            - Anti Smoke Throw Limit: removes throwing limit for smoke grenades
+            - Anti Knockback: removes knockback when shooting a flintlock
             - Anti Scope UI: disables scope overlay on sniper
         - Gun Store:
             - Open Gunstore UI: opens gun store ui
@@ -59,15 +62,14 @@ Jailbreak:
                 - Allow Projectiles: allows projectiles to be dropped
         - Break Experience:
             - Attempt Kill Player: attempts to kill a player by flinging them
-            - Teleport Locations: list of teleports to positions where targets in a vehicle get automatically kicked out and can even get killed
+            - Teleport Locations: list of teleports to positions where targets in a vehicle get automatically kicked out then killed
             - Teleport Player: select target (This will not work on yourself.)
         - Silent Aim:
             - Master Switch: enables silent aim
             - FOV Target Select: enables fov target selection
                  - FOV Value: self explanatory
                  - FOV Circle: enables fov circle
-            - Movement Prediction
-                 - Prediction Value: seconds for aimbot to predict
+            - Movement Prediction: aimbot will attempt to predict next movement of target
             - Extended Aimbot Range: slightly extends aimbot range
             - Allow Taser Aimbot: allows aimbot to work on taser 
             - Allow Target Prisoner: allows aimbot to target prisoners
@@ -155,6 +157,7 @@ Jailbreak:
             - Automatic Open Side Gate: automatically opens gate from prison side
             - Automatic Open Main Gate: automatically opens main prison gate
             - Automatic Open Cells: automatically opens all cells
+            - Break Max Security Elevator: breaks the elevator in the max security room
         - Break Nearby Vehicles: 
             - Master Switch: enables break nearby vehicles
             - Only On Weapon Equipped: only break nearby vehicles when weapon is equipped
@@ -196,6 +199,7 @@ Jailbreak:
         - Disablers:
             - Disable Lasers: disables lasers damage
             - Disable Cameras: disables cameras damage
+            - Disable Radio Keybind: disables radio ui when pressing R
             - Disable Spotlight Tracking: disables prison spotlight tracking
             - Disable Minimap Flash: disables minimap flashes on enemy players
             - Disable Automatic Unparachute: disables automatic unparachutes when you touch ground/etc..
@@ -244,6 +248,7 @@ Jailbreak:
             - Call Elevator To Floor: call elevator to floor
         Airdrop:
             - Robbery Status
+            - Automatic Hold E: automatically holds E when near airdrop
             - Break NPCs: make npcs not target you
         Cargo Plane:
             - Robbery Status
@@ -287,5 +292,6 @@ Jailbreak:
        - Save UI Status: saves your latest UI status
        - Change UI Toggle Keybind: change ui toggle keybind
        - Lighting Technology: change lighting technology to try improve fps
+       - Config: manage configs
 
 more soonTM..
