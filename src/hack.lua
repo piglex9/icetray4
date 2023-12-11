@@ -4,7 +4,7 @@
                     Version 2, December 2004
 
  Copyright (C) 2023 Alexandru Armando Davisca Petrescu
-  Röntgengasse 94, 1170 Vienna, Austria
+    -Vienna, Austria
  Everyone is permitted to copy and distribute verbatim or modified
  copies of this license document, and changing it is allowed as long
  as the name is changed.
@@ -14,6 +14,17 @@
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
 
+--]]
+
+--[[
+    fixuri nebunatice pentru noul hack nebun electron woowowoow (11.12.2023):
+        - la functiunea "arrestCircleUpdate" incerca electron sa schimbe upvalueurile de la threaduri si nu la functiuni
+        - am scos 2 functiuni (showContextMessage si doFireworks) care dadea crash la joc din cauza la electron
+        - kill aura nu o fost in tableul pentru config
+        - am bagat tot din uiFo.lua in scriptul main
+        - am scos functiunea warningBar ca si aici dadea eroarea cu plugin necesar
+        - acum la airdropuri cand te pune sa apesi "E" si ai automatic hold, nu o sa se mai opreasca din apasat daca iei o arma in mana
+        - serverul nu mai este activ, functiuni ca "resolvePowerplant" nu o sa mai functiuneze
 --]]
 
 if global then
@@ -67,6 +78,1739 @@ local function ON_LOADUP()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/piglex9/icetray4/main/src/ui.lua"))()
     end
     ON_SERVER_CONNECT()
+    local function executionIdentifier()
+        local executor = identifyexecutor()
+        global.getExecutor = executor
+        global.exploit = Electron and "electron" or "???" --@ inainte o fost si synapse si scriptware aici, acum doar electron
+        global.version = _version
+    end
+    executionIdentifier()
+    --@ totul intre 86 si 1810 este din uiFo.lua, am bagat totul de acolo aici ca dadea eroarea "thread couldn't modify instance (missing plugin)"
+    --@ unele chestii nu sunt implementate inca sau cel mai probabil nu vor fii niciodata implementate
+    global.config = {}
+    global.ui_status = {}
+    global.ui.statusRobberies = {}
+    global.ui.colorForcing = {}
+    local function ui()
+        local function ui()
+            local window = global.ui.window.tab
+            local plr = global.ui.player.tab
+            local vehicle = global.ui.vehicle.tab
+            local misc = global.ui.misc.tab
+            local combat = global.ui.combat.tab
+            local markers = global.ui.markers.tab
+            local robbery = global.ui.robbery.tab
+            local info = global.ui.info.tab
+            local uiMarker = markers:Section("Marker")
+            local uiTeams, teamsSection = markers:Section("Teams")
+            local uiObj, objSection = markers:Section("Objects")
+            local uiSettings, settingsSection = markers:Section("Settings")
+            local sections = {
+                WalkSpeed = plr:Section("Walk Speed");
+                JumpPower = plr:Section("Jump Power");
+                PlayerUtils = plr:Section("Utils");
+                PlayerMisc = plr:Section("Misc");
+                Marker = uiMarker;
+                Teams = uiTeams;
+                Objects = uiObj;
+                Settings = uiSettings;
+                Gunmods = combat:Section("Gun Mods");
+                GunmodsMisc = combat:Section("Misc");
+                Gunstore = combat:Section("Gun Store");
+                BreakExperience = combat:Section("Break Experience");
+                Killaura = combat:Section("Kill Aura");
+                Silentaim = combat:Section("Silent Aim");
+                Arrestaura = combat:Section("Arrest Aura");
+                Waypoints = misc:Section("Waypoints");
+                Misc = misc:Section("Misc");
+                Prison = misc:Section("Prison");
+                BreakVehicles = misc:Section("Break Nearby Vehicles");
+                Auras = misc:Section("Auras");
+                PlaySounds = misc:Section("Play Sounds");
+                RocketFun = misc:Section("Rocket Fun");
+                C4Fun = misc:Section("C4 Fun");
+                Disablers = misc:Section("Disablers");
+                CarModify = vehicle:Section("Car Modifications");
+                HeliModify = vehicle:Section("Heli Modifications");
+                PlaneModify = vehicle:Section("Plane Modifications");
+                BikeModify = vehicle:Section("Bike Modifications");
+                BoatModify = vehicle:Section("Boat Modifications");
+                VehicleMisc = vehicle:Section("Misc");
+                Bank = robbery:Section("Bank");
+                BankTruck = robbery:Section("Money Truck");
+                Jewelry = robbery:Section("Jewelry");
+                Museum = robbery:Section("Museum");
+                Casino = robbery:Section("Casino");
+                Airdrop = robbery:Section("Airdrop");
+                Cargoplane = robbery:Section("Cargo Plane");
+                Mansion = robbery:Section("Mansion");
+                Trains = robbery:Section("Trains");
+                Powerplant = robbery:Section("Powerplant");
+                Tomb = robbery:Section("Tomb");
+                Cargoship = robbery:Section("Cargoship");
+                SmallStores = robbery:Section("Small Stores");
+                Info = info:Section("Info");
+                LightingTechnology = info:Section("Lighting Technology");
+                Config = info:Section("Config");
+            }
+            global.ui.sections = sections
+            local function slider(section, name, min, max, callback)
+                local section = sections[section]
+                return section:Slider(name, min, max, callback)
+            end
+            local function toggle(section, name, callback, isMasterSwitch)
+                if not isMasterSwitch then
+                    isMasterSwitch = false
+                end
+                local section = sections[section]
+                return section:Toggle(name, callback, isMasterSwitch)
+            end
+            local function label(section, text, forceColor, forceLeft)
+                local section = sections[section]
+                global.ui.statusRobberies[text] = text
+                global.ui.colorForcing[text] = forceColor
+                return section:Label(text, forceColor, forceLeft)
+            end
+            local function button(section, name, callback)
+                local section = sections[section]
+                return section:Button(name, callback)
+            end
+            local function textbox(section, name, nametext, callback)
+                local section = sections[section]
+                return section:TextBox(name, nametext, callback)
+            end
+            local function selector(section, name, list, callback)
+                local section = sections[section]
+                return section:Selector(name, list, callback)
+            end
+            local function dropdown(section, name, list, callback)
+                local section = sections[section]
+                return section:DropDown(name, list, callback)
+            end
+            local function keybind(section, name, default_key, callback)
+                local section = sections[section]
+                return section:KeyBind(name, default_key, callback)
+            end
+            local function credit(section, name)
+                local section = sections[section]
+                return section:Credit(name)
+            end
+            local callback = {}
+            local function sections()
+                local config = global.config
+                local function player()
+                    function callback.master_switch_walkspeed(bool)
+                        global.ui_status.master_switch_walkspeed = bool
+                    end
+                    function callback.master_switch_jumppower(bool)
+                        global.ui_status.master_switch_jumppower = bool
+                    end
+                    function callback.walkspeed(num)
+                        global.ui_status.walkspeed = num
+                    end
+                    function callback.ws_disable_if_handcuffed(bool)
+                        global.ui_status.ws_disable_if_handcuffed = bool
+                    end
+                    function callback.jp_disable_if_handcuffed(bool)
+                        global.ui_status.jp_disable_if_handcuffed = bool
+                    end
+                    function callback.jumppower(num)
+                        global.ui_status.jumppower = num
+                    end
+                    function callback.antiragdoll(bool)
+                        global.ui_status.antiragdoll = bool
+                    end
+                    function callback.antifalldamage(bool)
+                        global.ui_status.antifalldamage = bool
+                    end
+                    function callback.antiskydive(bool)
+                        global.ui_status.antiskydive = bool
+                    end
+                    function callback.antitaze(bool)
+                        global.ui_status.antitaze = bool
+                    end
+                    function callback.allow_equip_on_duck(bool)
+                        global.ui_status.allow_equip_on_duck = bool
+                    end
+                    function callback.infduck(bool)
+                        global.ui_status.infduck = bool
+                    end
+                    function callback.infpunch(bool)
+                        global.ui_status.infpunch = bool
+                    end
+                    function callback.alwaysjump(bool)
+                        global.ui_status.alwaysjump = bool
+                    end
+                    function callback.allow_equip_with_items(bool)
+                        global.ui_status.allow_equip_with_items = bool
+                    end
+                    function callback.allow_equip_while_flying(bool)
+                        global.ui_status.allow_equip_while_flying = bool
+                    end
+                    function callback.automatic_respawn_on_taze(bool)
+                        global.ui_status.automatic_respawn_on_taze = bool
+                    end
+                    function callback.alwayssprint(bool)
+                        global.ui_status.alwayssprint = bool
+                    end
+                    function callback.jesus(bool)
+                        global.ui_status.jesus = bool
+                    end
+                    function callback.automatic_punch(bool)
+                        global.ui_status.automatic_punch = bool
+                    end
+                    function callback.always_duck(bool)
+                        global.ui_status.always_duck = bool
+                    end
+                    function callback.respawn()
+                        local dieOfFalldamage = global.registry.dieOfFalldamage
+                        if dieOfFalldamage then
+                            dieOfFalldamage()
+                        end
+                    end
+                    function callback.antiparachute(bool)
+                        global.ui_status.antiparachute = bool
+                    end
+                    function callback.fov(num)
+                        global.ui_status.fov = num or 70
+                    end
+                    function callback.parachute_key(key)
+                        global.ui_status.parachute_key = key.Name
+                    end
+                    function callback.parachute_on_key(bool)
+                        global.ui_status.parachute_on_key = bool
+                    end
+                    function callback.glider_key(key)
+                        global.ui_status.glider_key = key.Name
+                    end
+                    function callback.glider_on_key(bool)
+                        global.ui_status.glider_on_key = bool
+                    end
+                    function callback.one_way_noclip(bool)
+                        global.ui_status.one_way_noclip = bool
+                    end
+                    function callback.noclip_attempt_key(key)
+                        global.ui_status.noclip_attempt_key = key.Name
+                    end
+                    function callback.infinite_roll(bool)
+                        global.ui_status.infinite_roll = bool
+                    end
+                    function callback.roll_duration(num)
+                        global.ui_status.roll_duration = num
+                    end
+                    function callback.always_roll(bool)
+                        global.ui_status.always_roll = bool
+                    end
+                    function callback.break_physics(bool)
+                        global.ui_status.break_physics = bool
+                    end
+                    function callback.frozen_roll(bool)
+                        global.ui_status.frozen_roll = bool
+                    end
+                    function callback.always_juiced(bool)
+                        global.ui_status.always_juiced = bool
+                    end
+                    function callback.fortnite_mode(bool)
+                        global.ui_status.fortnite_mode = bool
+                    end
+                    function callback.fortnite_mode_speed(num)
+                        global.ui_status.fortnite_mode_speed = num
+                    end
+                    function callback.automatic_equip_after_death(bool)
+                        global.ui_status.automatic_equip_after_death = bool
+                    end
+                    local master_switch_walkspeed = toggle("WalkSpeed", "Master Switch", callback.master_switch_walkspeed, true)
+                    local ws = slider("WalkSpeed", "Value", 16, 100, callback.walkspeed)
+                    master_switch_walkspeed.setChild(ws)
+                    local ws_disable_if_handcuffed = toggle("WalkSpeed", "Disable If Handcuffed", callback.ws_disable_if_handcuffed)
+                    master_switch_walkspeed.setChild(ws_disable_if_handcuffed)
+                    local master_switch_jumppower = toggle("JumpPower", "Master Switch", callback.master_switch_jumppower, true)
+                    local jp = slider("JumpPower", "Value", 50, 300, callback.jumppower)
+                    master_switch_jumppower.setChild(jp)
+                    local jp_disable_if_handcuffed = toggle("JumpPower", "Disable If Handcuffed", callback.jp_disable_if_handcuffed)
+                    master_switch_jumppower.setChild(jp_disable_if_handcuffed)
+                    local respawn = button("PlayerUtils", "Choose Respawn", callback.respawn)
+                    local antiragdoll = toggle("PlayerUtils", "Anti Ragdoll", callback.antiragdoll)
+                    local antiskydive = toggle("PlayerUtils", "Anti Skydive", callback.antiskydive)
+                    local antiparachute = toggle("PlayerUtils", "Anti Parachute", callback.antiparachute)
+                    local antifalldamage = toggle("PlayerUtils", "Anti Falldamage", callback.antifalldamage)
+                    local antitaze = toggle("PlayerUtils", "Anti Taze", callback.antitaze)
+                    local jesus = toggle("PlayerUtils", "Jesus", callback.jesus)
+                    function callback.flight()
+                        global.notify("Feature not implemented", 5)
+                    end
+                    local flight = toggle("PlayerUtils", "Flight", callback.flight)
+                    config.flight = flight
+                    local automatic_equip_after_death = toggle("PlayerUtils", "Automatic Equip After Death", callback.automatic_equip_after_death)
+                    config.automatic_equip_after_death = automatic_equip_after_death
+                    local allow_equip_on_duck = toggle("PlayerUtils", "Allow Equip On Duck", callback.allow_equip_on_duck)
+                    local allow_equip_while_flying = toggle("PlayerUtils", "Allow Equip While Flying", callback.allow_equip_while_flying)
+                    local allow_equip_with_items = toggle("PlayerUtils", "Allow Equip With Items", callback.allow_equip_with_items)
+                    local fov = slider("PlayerMisc", "FOV", 70, 150, callback.fov)
+                    local glider_on_key = toggle("PlayerMisc", "Glider On Key", callback.glider_on_key, true)
+                    local glider_key = keybind("PlayerMisc", "Glider Key", Enum.KeyCode.J, callback.glider_key)
+                    glider_on_key.setChild(glider_key)
+                    local parachute_on_key = toggle("PlayerMisc", "Parachute On Key", callback.parachute_on_key, true)
+                    local parachute_key = keybind("PlayerMisc", "Parachute Key", Enum.KeyCode.Z, callback.parachute_key)
+                    parachute_on_key.setChild(parachute_key)
+                    local one_way_noclip = toggle("PlayerMisc", "1 Way Noclip", callback.one_way_noclip, true)
+                    local noclip_attempt_key = keybind("PlayerMisc", "Noclip Attempt Key", Enum.KeyCode.H, callback.noclip_attempt_key)
+                    one_way_noclip.setChild(noclip_attempt_key)
+                    local infduck = toggle("PlayerMisc", "Infinite Duck", callback.infduck)
+                    local infpunch = toggle("PlayerMisc", "Infinite Punch", callback.infpunch)
+                    local alwaysjump = toggle("PlayerMisc", "Infinite Jump", callback.alwaysjump)
+                    local infinite_roll = toggle("PlayerMisc", "Infinite Roll", callback.infinite_roll)
+                    local break_physics = toggle("PlayerMisc", "Break Roll Physics", callback.break_physics)
+                    local frozen_roll = toggle("PlayerMisc", "Frozen Roll", callback.frozen_roll)
+                    local roll_duration = slider("PlayerMisc", "Roll Duration", 3, 50, callback.roll_duration)
+                    local always_roll = toggle("PlayerMisc", "Always Roll", callback.always_roll)
+                    local alwayssprint = toggle("PlayerMisc", "Always Sprint", callback.alwayssprint)
+                    local automatic_punch = toggle("PlayerMisc", "Always Punch", callback.automatic_punch)
+                    local always_duck = toggle("PlayerMisc", "Always Duck", callback.always_duck)
+                    local always_juiced = toggle("PlayerMisc", "Always Juiced", callback.always_juiced)
+                    local fortnite_mode = toggle("PlayerMisc", "Fortnite Mode", callback.fortnite_mode, true)
+                    local fortnite_mode_speed = slider("PlayerMisc", "Animation Speed", 1, 10, callback.fortnite_mode_speed)
+                    fortnite_mode.setChild(fortnite_mode_speed)
+                    function callback.spinbot(bool)
+                        global.ui_status.spinbot = bool
+                    end
+                    function callback.spinbot_speed(num)
+                        global.ui_status.spinbot_speed = num
+                    end
+                    local spinbot = toggle("PlayerMisc", "Spinbot", callback.spinbot, true)
+                    local spinbot_speed = slider("PlayerMisc", "Spin Speed", 1, 15, callback.spinbot_speed)
+                    spinbot.setChild(spinbot_speed)
+                    config.spinbot = spinbot
+                    config.spinbot_speed = spinbot_speed
+                    function callback.hide_character()
+                        global.registry.hide_character_function()
+                    end
+                    local hide_character = button("PlayerMisc", "Hide Character", callback.hide_character)
+                    local automatic_respawn_on_taze = toggle("PlayerMisc", "Automatic Respawn On Stunned", callback.automatic_respawn_on_taze)
+                    config.master_switch_walkspeed = master_switch_walkspeed
+                    config.walkspeed = ws
+                    config.always_juiced = always_juiced
+                    config.infinite_roll = infinite_roll
+                    config.fortnite_mode = fortnite_mode
+                    config.fortnite_mode_speed = fortnite_mode_speed
+                    config.always_roll = always_roll
+                    config.frozen_roll = frozen_roll
+                    config.break_physics = break_physics
+                    config.roll_duration = roll_duration
+                    config.ws_disable_if_handcuffed = ws_disable_if_handcuffed
+                    config.master_switch_jumppower = master_switch_jumppower
+                    config.jumppower = jp
+                    config.jp_disable_if_handcuffed = jp_disable_if_handcuffed
+                    config.antiragdoll = antiragdoll
+                    config.one_way_noclip = one_way_noclip
+                    config.noclip_attempt_key = noclip_attempt_key
+                    config.antiskydive = antiskydive
+                    config.antiparachute = antiparachute
+                    config.antifalldamage = antifalldamage
+                    config.parachute_on_key = parachute_on_key
+                    config.parachute_key = parachute_key
+                    config.glider_on_key = glider_on_key
+                    config.glider_key = glider_key
+                    config.fov = fov
+                    config.antitaze = antitaze
+                    config.jesus = jesus
+                    config.automatic_punch = automatic_punch
+                    config.automatic_respawn_on_taze = automatic_respawn_on_taze
+                    config.infduck = infduck
+                    config.infpunch = infpunch
+                    config.alwaysjump = alwaysjump
+                    config.always_duck = always_duck
+                    config.alwayssprint = alwayssprint
+                    config.allow_equip_on_duck = allow_equip_on_duck
+                    config.allow_equip_while_flying = allow_equip_while_flying
+                    config.allow_equip_with_items = allow_equip_with_items
+                end
+                local function vehicle()
+                    function callback.master_switch_carmodify(bool)
+                        global.ui_status.master_switch_carmodify = bool
+                    end
+                    function callback.car_speed(num)
+                        global.ui_status.car_speed = num
+                    end
+                    function callback.car_brakes(num)
+                        global.ui_status.car_brakes = num
+                    end
+                    function callback.car_turnspeed(num)
+                        global.ui_status.car_turnspeed = num
+                    end
+                    function callback.car_height(num)
+                        global.ui_status.car_height = num
+                    end
+                    function callback.master_switch_heli_speed(bool)
+                        global.ui_status.master_switch_heli_speed = bool
+                    end
+                    function callback.heli_speed(num)
+                        global.ui_status.heli_speed = num
+                    end
+                    function callback.infinite_heli_height(bool)
+                        global.ui_status.infinite_heli_height = bool
+                    end
+                    function callback.infinite_drone_height(bool)
+                        global.ui_status.infinite_drone_height = bool
+                    end
+                    function callback.infinite_nitro(bool)
+                        global.ui_status.infinite_nitro = bool
+                    end
+                    function callback.antitirepop(bool)
+                        global.ui_status.antitirepop = bool
+                    end
+                    function callback.allow_equip_in_vehicle(bool)
+                        global.ui_status.allow_equip_in_vehicle = bool
+                    end
+                    function callback.show_hotbar_in_vehicle(bool)
+                        global.ui_status.show_hotbar_in_vehicle = bool
+                    end
+                    function callback.destroy_all_destructibles(bool)
+                        global.ui_status.destroy_all_destructibles = bool
+                    end
+                    function callback.automatic_flip_vehicle(bool)
+                        global.ui_status.automatic_flip_vehicle = bool
+                    end
+                    function callback.spam_headlights(bool)
+                        global.ui_status.spam_headlights = bool
+                    end
+                    function callback.spam_jeep_roof(bool)
+                        global.ui_status.spam_jeep_roof = bool
+                    end
+                    function callback.always_drift(bool)
+                        global.ui_status.always_drift = bool
+                    end
+                    function callback.automatic_hijack_vehicles(bool)
+                        global.ui_status.automatic_hijack_vehicles = bool
+                    end
+                    function callback.instant_rope(bool)
+                        global.ui_status.instant_rope = bool
+                    end
+                    function callback.rope_aura(bool)
+                        global.ui_status.rope_aura = bool
+                    end
+                    function callback.automatic_eject_vehicle_player(bool)
+                        global.ui_status.automatic_eject_vehicle_player = bool
+                    end
+                    function callback.automatic_lock_vehicle(bool)
+                        global.ui_status.automatic_lock_vehicle = bool
+                    end
+                    function callback.master_switch_carmodify(bool)
+                        global.ui_status.master_switch_carmodify = bool
+                    end
+                    function callback.destruct_delay(num)
+                        global.ui_status.destruct_delay = num
+                    end
+                    function callback.no_trailer(bool)
+                        global.ui_status.no_trailer = bool
+                    end
+                    function callback.vehicle_jump(bool)
+                        global.ui_status.vehicle_jump = bool
+                    end
+                    function callback.vehicle_jump_key(key)
+                        global.ui_status.vehicle_jump_key = key.Name 
+                    end
+                    function callback.master_switch_plane(bool)
+                        global.ui_status.master_switch_plane = bool
+                    end
+                    function callback.anti_max_height(bool)
+                        global.ui_status.anti_max_height = bool
+                    end
+                    function callback.plane_speed(num)
+                        global.ui_status.plane_speed = num
+                    end
+                    function callback.automatic_jet_heat_seek(bool)
+                        global.ui_status.automatic_jet_heat_seek = bool
+                    end
+                    function callback.master_switch_boat(bool)
+                        global.ui_status.master_switch_boat = bool
+                    end
+                    function callback.boat_speed(num)
+                        global.ui_status.boat_speed = num
+                    end
+                    function callback.boat_on_land(bool)
+                        global.ui_status.boat_on_land = bool
+                    end
+                    function callback.master_switch_bike(bool)
+                        global.ui_status.master_switch_bike = bool
+                    end
+                    function callback.bike_speed(num)
+                        global.ui_status.bike_speed = num
+                    end
+                    function callback.dirt_bike_height(bool)
+                        global.ui_status.dirt_bike_height = bool
+                    end
+                    function callback.bike_height_value(num)
+                        global.ui_status.bike_height_value = num
+                    end
+                    function callback.rope_length(num)
+                        global.ui_status.rope_length = num
+                    end
+                    local master_switch_carmodify = toggle("CarModify", "Master Switch", callback.master_switch_carmodify, true)
+                    local car_speed = slider("CarModify", "Speed", 1, 50, callback.car_speed)
+                    local car_brakes = slider("CarModify", "Brakes", 1, 50, callback.car_brakes)
+                    local car_turnspeed = slider("CarModify", "Turn Speed", 1, 5, callback.car_turnspeed)
+                    local car_height = slider("CarModify", "Height", 3, 125, callback.car_height)
+                    master_switch_carmodify.setChild(car_speed)
+                    master_switch_carmodify.setChild(car_brakes)
+                    master_switch_carmodify.setChild(car_turnspeed)
+                    master_switch_carmodify.setChild(car_height)
+                    local infinite_nitro = toggle("CarModify", "Infinite Nitro", callback.infinite_nitro)
+                    local automatic_flip_vehicle = toggle("CarModify", "Automatic Flip Vehicle", callback.automatic_flip_vehicle)
+                    local spam_headlights = toggle("CarModify", "Spam Headlights", callback.spam_headlights)
+                    local spam_jeep_roof = toggle("CarModify", "Spam Jeep Roof", callback.spam_jeep_roof)
+                    local always_drift = toggle("CarModify", "Always Drift", callback.always_drift)
+                    master_switch_carmodify.setChild(infinite_nitro)
+                    master_switch_carmodify.setChild(automatic_flip_vehicle)
+                    master_switch_carmodify.setChild(spam_headlights)
+                    master_switch_carmodify.setChild(spam_jeep_roof)
+                    master_switch_carmodify.setChild(always_drift)
+                    local master_switch_heli_speed = toggle("HeliModify", "Master Switch", callback.master_switch_heli_speed, true)
+                    local heli_speed = slider("HeliModify", "Speed", 1, 5, callback.heli_speed)
+                    local rope_length = slider("HeliModify", "Rope Length", 50, 200, callback.rope_length)
+                    local infinite_heli_height = toggle("HeliModify", "Infinite Heli Height", callback.infinite_heli_height)
+                    local infinite_drone_height = toggle("HeliModify", "Infinite Drone Height", callback.infinite_drone_height)
+                    local instant_rope = toggle("HeliModify", "Instant Rope", callback.instant_rope, true)
+                    local rope_aura = toggle("HeliModify", "Extended Rope", callback.rope_aura)
+                    master_switch_heli_speed.setChild(heli_speed)
+                    master_switch_heli_speed.setChild(rope_length)
+                    master_switch_heli_speed.setChild(infinite_heli_height)
+                    master_switch_heli_speed.setChild(infinite_drone_height)
+                    master_switch_heli_speed.setChild(instant_rope)
+                    master_switch_heli_speed.setChild(rope_aura)
+                    instant_rope.setChild(rope_aura)
+                    local master_switch_plane = toggle("PlaneModify", "Master Switch", callback.master_switch_plane, true)
+                    local plane_speed = slider("PlaneModify", "Speed", 1, 5, callback.plane_speed)
+                    local anti_max_height = toggle("PlaneModify", "Anti Max Height", callback.anti_max_height)
+                    local automatic_jet_heat_seek = toggle("PlaneModify", "Automatic Jet Heat Seek", callback.automatic_jet_heat_seek)
+                    master_switch_plane.setChild(plane_speed)
+                    master_switch_plane.setChild(anti_max_height)
+                    master_switch_plane.setChild(automatic_jet_heat_seek)
+                    local master_switch_bike = toggle("BikeModify", "Master Switch", callback.master_switch_bike, true)
+                    local bike_speed = slider("BikeModify", "Speed", 1, 5, callback.bike_speed)
+                    local dirt_bike_height = toggle("BikeModify", "Dirt Bike Height", callback.dirt_bike_height, true)
+                    local bike_height_value = slider("BikeModify", "Value", 1, 15, callback.bike_height_value)
+                    dirt_bike_height.setChild(bike_height_value)
+                    master_switch_bike.setChild(bike_speed)
+                    master_switch_bike.setChild(dirt_bike_height)
+                    local master_switch_boat = toggle("BoatModify", "Master Switch", callback.master_switch_boat, true)
+                    local boat_speed = slider("BoatModify", "Speed", 1, 5, callback.boat_speed)
+                    local boat_on_land = toggle("BoatModify", "Boat On Land", callback.boat_on_land)
+                    master_switch_boat.setChild(boat_speed)
+                    master_switch_boat.setChild(boat_on_land)
+                    local force_set_bodycolor = textbox("VehicleMisc", "Force Bodycolor", "Color Name", callback.force_set_bodycolor)
+                    local antitirepop = toggle("VehicleMisc", "Anti Break Vehicle", callback.antitirepop)
+                    local no_trailer = toggle("VehicleMisc", "No Semitruck Trailer", callback.no_trailer)
+                    local vehicle_jump = toggle("VehicleMisc", "Vehicle Jump", callback.vehicle_jump, true)
+                    local vehicle_jump_key = keybind("VehicleMisc", "Vehicle Jump Key", Enum.KeyCode.X, callback.vehicle_jump_key)
+                    vehicle_jump.setChild(vehicle_jump_key)
+                    local automatic_hijack_vehicles = toggle("VehicleMisc", "Automatic Hijack Vehicles", callback.automatic_hijack_vehicles)
+                    local automatic_lock_vehicle = toggle("VehicleMisc", "Automatic Lock Vehicle", callback.automatic_lock_vehicle)
+                    local automatic_eject_vehicle_player = toggle("VehicleMisc", "Automatic Eject Passengers", callback.automatic_eject_vehicle_player)
+                    local destroy_all_destructibles = toggle("VehicleMisc", "Destroy All Destructibles", callback.destroy_all_destructibles, true)
+                    local destruct_delay = slider("VehicleMisc", "Destruct Delay", 0, 10, callback.destruct_delay)
+                    destroy_all_destructibles.setChild(destruct_delay)
+                    local show_hotbar_in_vehicle = toggle("VehicleMisc", "Show Hotbar In Vehicle", callback.show_hotbar_in_vehicle)
+                    config.master_switch_boat = master_switch_boat
+                    config.boat_speed = boat_speed
+                    config.boat_on_land = boat_on_land
+                    config.master_switch_plane = master_switch_plane
+                    config.plane_speed = plane_speed
+                    config.anti_max_height = anti_max_height
+                    config.automatic_jet_heat_seek = automatic_jet_heat_seek
+                    config.master_switch_bike = master_switch_bike
+                    config.bike_speed = bike_speed
+                    config.dirt_bike_height = dirt_bike_height
+                    config.bike_height_value = bike_height_value
+                    config.master_switch_carmodify = master_switch_carmodify
+                    config.car_speed = car_speed
+                    config.vehicle_jump = vehicle_jump
+                    config.car_brakes = car_brakes
+                    config.no_trailer = no_trailer
+                    config.car_turnspeed = car_turnspeed
+                    config.rope_length = rope_length
+                    config.car_height = car_height
+                    config.master_switch_heli_speed = master_switch_heli_speed
+                    config.destruct_delay = destruct_delay
+                    config.heli_speed = heli_speed
+                    config.automatic_flip_vehicle = automatic_flip_vehicle
+                    config.spam_headlights = spam_headlights
+                    config.spam_jeep_roof = spam_jeep_roof
+                    config.always_drift = always_drift
+                    config.automatic_lock_vehicle = automatic_lock_vehicle
+                    config.vehicle_jump_key = vehicle_jump_key
+                    config.automatic_eject_vehicle_player = automatic_eject_vehicle_player
+                    config.infinite_heli_height = infinite_heli_height
+                    config.instant_rope = instant_rope
+                    config.rope_aura = rope_aura
+                    config.infinite_drone_height = infinite_drone_height
+                    config.infinite_nitro = infinite_nitro
+                    config.destroy_all_destructibles = destroy_all_destructibles
+                    config.automatic_hijack_vehicles = automatic_hijack_vehicles
+                    config.antitirepop = antitirepop
+                    config.allow_equip_in_vehicle = allow_equip_in_vehicle
+                    config.show_hotbar_in_vehicle = show_hotbar_in_vehicle
+                end
+                local function misc()
+                    function callback.always_keycard(bool)
+                        global.ui_status.always_keycard = bool
+                    end
+                    function callback.no_equip_conditions(bool)
+                        global.ui_status.no_equip_conditions = bool
+                    end
+                    function callback.never_unload_world(bool)
+                        global.ui_status.never_unload_world = bool
+                    end
+                    function callback.remove_clothing()
+                        if global._loaded then
+                            local hitbox = workspace.ClothingRacks.ClothingRack.Hitbox
+                            fireclickdetector(hitbox.ClickDetector)
+                        end
+                    end
+                    function callback.give_police_clothing()
+                        if global._loaded then
+                            local client = global.registry.client
+                            for i,v in next, client.descendants.givers do
+                                if v.Name == "Station" then
+                                    if v.Item.Value == "ShirtPolice" then
+                                        fireclickdetector(v.ClickDetector)
+                                    end
+                                    if v.Item.Value == "PantsPolice" then
+                                        fireclickdetector(v.ClickDetector)
+                                    end
+                                end
+                                task.wait()
+                            end
+                        end
+                    end
+                    function callback.give_police_hat()
+                        if global._loaded then
+                            local client = global.registry.client
+                            for i,v in next, client.descendants.givers do
+                                if v.Name == "Station" then
+                                    if v.Item.Value == "HatPolice" then
+                                        fireclickdetector(v.ClickDetector)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    function callback.pickpocketaura(bool)
+                        global.ui_status.pickpocketaura = bool
+                    end
+                    function callback.range_pickpocketaura(num)
+                        global.ui_status.range_pickpocketaura = num
+                    end
+                    function callback.droppedcashaura(bool)
+                        global.ui_status.droppedcashaura = bool
+                    end
+                    function callback.droppedcashrange(num)
+                        global.ui_status.droppedcashrange = num
+                    end
+                    function callback.range_pickpocketaura(num)
+                        global.ui_status.range_pickpocketaura = num
+                    end
+                    function callback.disable_lasers(bool)
+                        global.ui_status.disable_lasers = bool
+                    end
+                    function callback.disable_cameras(bool)
+                        global.ui_status.disable_cameras = bool
+                    end
+                    function callback.master_switch_no_circle_delay(bool)
+                        global.ui_status.master_switch_no_circle_delay = bool
+                    end
+                    function callback.master_switch_open_doors(bool)
+                        global.ui_status.master_switch_open_doors = bool
+                    end
+                    function callback.disable_military_turrets(bool)
+                        global.ui_status.disable_military_turrets = bool
+                    end
+                    function callback.disable_smoke_grenade_effect(bool)
+                        global.ui_status.disable_smoke_grenade_effect = bool
+                    end
+                    function callback.open_security_cameras()
+                        if global._loaded then        
+                            local client = global.registry.client
+                            for i,v in next, client.modules.ui.CircleAction.Specs do
+                                if v.Name == "Open Security Cameras" then
+                                    v:Callback(true)
+                                    break
+                                end
+                            end 
+                        end
+                    end
+                    function callback.rainbowbullets(bool)
+                        global.ui_status.rainbowbullets = bool
+                    end
+                    function callback.disable_anti_flight_zones(bool)
+                        global.ui_status.disable_anti_flight_zones = bool
+                    end
+                    function callback.infinite_jetpack_fuel(bool)
+                        global.ui_status.infinite_jetpack_fuel = bool
+                    end
+                    function callback.break_vehicles(bool)
+                        global.ui_status.break_vehicles = bool
+                    end
+                    function callback.master_switch_eject_aura(bool)
+                        global.ui_status.master_switch_eject_aura = bool
+                    end
+                    function callback.range_ejectaura(num)
+                        global.ui_status.range_ejectaura = num
+                    end
+                    function callback.master_switch_tase_aura(bool)
+                        global.ui_status.master_switch_tase_aura = bool
+                    end
+                    function callback.automatic_open_front_gates(bool)
+                        global.ui_status.automatic_open_front_gates = bool
+                    end
+                    function callback.automatic_open_side_gate(bool)
+                        global.ui_status.automatic_open_side_gate = bool
+                    end
+                    function callback.automatic_open_main_gate(bool)
+                        global.ui_status.automatic_open_main_gate = bool
+                    end
+                    function callback.automatic_punch_electric_gate(bool)
+                        global.ui_status.automatic_punch_electric_gate = bool
+                    end
+                    function callback.automatic_open_cells(bool)
+                        global.ui_status.automatic_open_cells = bool
+                    end
+                    function callback.master_switch_breakout_aura(bool)
+                        global.ui_status.master_switch_breakout_aura = bool
+                    end
+                    function callback.range_breakoutaura(num)
+                        global.ui_status.range_breakoutaura = num
+                    end
+                    function callback.disable_home_turrets(bool)
+                        global.ui_status.disable_home_turrets = bool
+                    end
+                    function callback.open_secretbases(bool)
+                        global.ui_status.open_secretbases = bool
+                    end
+                    function callback.playsounds(tip)
+                        local client = global.registry.client
+                        local playsounds = global.registry.playSounds
+                        playsounds(tip, {
+                            Source = client.playerCharacter;
+                            MaxTime = 7;
+                            Volume = math.huge;
+                        })
+                    end
+                    function callback.annoyserver(bool)
+                        global.ui_status.annoyserver = bool
+                    end
+                    function callback.clicklightning(bool)
+                        global.ui_status.clicklightning = bool
+                    end
+                    function callback.only_on_weapon_equipped(bool)
+                        global.ui_status.only_on_weapon_equipped = bool
+                    end
+                    function callback.instant_break(bool)
+                        global.ui_status.instant_break = bool
+                    end
+                    function callback.target_enemy_team_only(bool)
+                        global.ui_status.target_enemy_team_only = bool
+                    end
+                    function callback.disable_automatic_unparachute(bool)
+                        global.ui_status.disable_automatic_unparachute = bool
+                    end
+                    function callback.clicknuke(bool)
+                        global.ui_status.clicknuke = bool
+                    end
+                    function callback.disable_minimap_flash(bool)
+                        global.ui_status.disable_minimap_flash = bool
+                    end
+                    function callback.pit_aura(bool)
+                        global.ui_status.pit_aura = bool
+                    end
+                    function callback.pit_aura_range(num)
+                        global.ui_status.pit_aura_range = num
+                    end
+                    function callback.auto_accept_battle(bool)
+                        global.ui_status.auto_accept_battle = bool
+                    end
+                    function callback.auto_start_matchmaking(bool)
+                        global.ui_status.auto_start_matchmaking = bool
+                    end
+                    function callback.place_waypoint(key)
+                        if global._loaded then
+                            local setWaypoint = global.registry.setWaypoint
+                            if setWaypoint then
+                                setWaypoint(key)
+                            end
+                        end
+                    end
+                    function callback.open_all_safes(bool)
+                        global.ui_status.open_all_safes = bool
+                    end
+                    function callback.c4dick_masterswitch(bool)
+                        global.ui_status.c4dick_masterswitch = bool
+                    end
+                    function callback.dick_player(key)
+                        if global._loaded then
+                            local dick_player = global.registry.dick_player
+                            if dick_player then
+                                dick_player(key)
+                            end
+                        end
+                    end
+                    function callback.spawn_dick()
+                        if global._loaded then
+                            local dick_player = global.registry.dick_player
+                            if dick_player then
+                                dick_player(players.LocalPlayer.Name)
+                            end
+                        end
+                    end
+                    function callback.disable_fireworks(bool)
+                        global.ui_status.disable_fireworks = bool
+                    end
+                    function callback.always_reequip_c4(bool)
+                        global.ui_status.always_reequip_c4 = bool
+                    end
+                    function callback.disable_spotlight_tracking(bool)
+                        global.ui_status.disable_spotlight_tracking = bool
+                    end
+                    function callback.automatic_open_yard_gates(bool)
+                        global.ui_status.automatic_open_yard_gates = bool
+                    end
+                    function callback.override_length(bool)
+                        global.ui_status.override_length = bool
+                    end
+                    function callback.dick_length(num)
+                        global.ui_status.dick_length = num
+                    end
+                    function callback.chatspy(bool)
+                        global.ui_status.chatspy = bool
+                    end
+                    function callback.break_maximum_security_elevator(bool)
+                        global.ui_status.break_maximum_security_elevator = bool
+                    end
+                    local place_waypoint = dropdown("Waypoints", "Place Waypoint", {}, callback.place_waypoint)
+                    local always_keycard = toggle("Misc", "Always Keycard", callback.always_keycard)
+                    local master_switch_open_doors = toggle("Misc", "Open Nearby Doors", callback.master_switch_open_doors)
+                    local master_switch_no_circle_delay = toggle("Misc", "No Circle Delay", callback.master_switch_no_circle_delay)
+                    local rainbowbullets = toggle("Misc", "Colorful Bullets", callback.rainbowbullets)
+                    local infinite_jetpack_fuel = toggle("Misc", "Infinite Jetpack Fuel", callback.infinite_jetpack_fuel)
+                    local never_unload_world = toggle("Misc", "Never Unload World", callback.never_unload_world)
+                    local open_secretbases = toggle("Misc", "Open Secretbases", callback.open_secretbases)
+                    local auto_accept_battle = toggle("Misc", "Automatic Accept Battle", callback.auto_accept_battle)
+                    local auto_start_matchmaking = toggle("Misc", "Automatic Start Matchmaking", callback.auto_start_matchmaking)
+                    local clicklightning = toggle("Misc", "Click Lightning", callback.clicklightning)
+                    local clicknuke = toggle("Misc", "Click Nuke", callback.clicknuke)
+                    local chatspy = toggle("Misc", "Chat Spy", callback.chatspy)
+                    local open_security_cameras = button("Misc", "Open Security Cameras", callback.open_security_cameras)
+                    local remove_clothing = button("Misc", "Remove Clothing", callback.remove_clothing)
+                    local give_police_clothing = button("Misc", "Give Police Clothing", callback.give_police_clothing)
+                    local give_police_hat = button("Misc", "Give Police Hat", callback.give_police_hat)
+                    local automatic_punch_electric_gate = toggle("Prison", "Automatic Punch Electric Gate", callback.automatic_punch_electric_gate)
+                    local automatic_open_front_gates = toggle("Prison", "Automatic Open Front Gates", callback.automatic_open_front_gates)
+                    local automatic_open_yard_gates = toggle("Prison", "Automatic Open Yard Gates", callback.automatic_open_yard_gates)
+                    local automatic_open_side_gate = toggle("Prison", "Automatic Open Side Gate", callback.automatic_open_side_gate)
+                    local automatic_open_main_gate = toggle("Prison", "Automatic Open Main Gate", callback.automatic_open_main_gate)
+                    local automatic_open_cells = toggle("Prison", "Automatic Open Cells", callback.automatic_open_cells)
+                    local break_maximum_security_elevator = toggle("Prison", "Break Max Security Elevator", callback.break_maximum_security_elevator)
+                    local break_vehicles = toggle("BreakVehicles", "Master Switch", callback.break_vehicles, true)
+                    local only_on_weapon_equipped = toggle("BreakVehicles", "Only On Weapon Equipped", callback.only_on_weapon_equipped)
+                    local instant_break = toggle("BreakVehicles", "Instant Break", callback.instant_break)
+                    local target_enemy_team_only = toggle("BreakVehicles", "Ignore Teammates", callback.target_enemy_team_only)
+                    break_vehicles.setChild(only_on_weapon_equipped)
+                    break_vehicles.setChild(instant_break)
+                    break_vehicles.setChild(target_enemy_team_only)
+                    local pickpocketaura = toggle("Auras", "Pickpocket Aura", callback.pickpocketaura, true)
+                    local range_pickpocketaura = slider("Auras", "Range", 1, 50, callback.range_pickpocketaura)
+                    pickpocketaura.setChild(range_pickpocketaura)
+                    local master_switch_eject_aura = toggle("Auras", "Eject Aura", callback.master_switch_eject_aura, true)
+                    local range_ejectaura = slider("Auras", "Range", 1, 80, callback.range_ejectaura)
+                    master_switch_eject_aura.setChild(range_ejectaura)
+                    local master_switch_breakout_aura = toggle("Auras", "Breakout Aura", callback.master_switch_breakout_aura, true)
+                    local range_breakoutaura = slider("Auras", "Range", 1, 20, callback.range_breakoutaura)
+                    master_switch_breakout_aura.setChild(range_breakoutaura)
+                    local pit_aura = toggle("Auras", "Pit Aura", callback.pit_aura, true)
+                    local pit_aura_range = slider("Auras", "Range", 10, 100, callback.pit_aura_range)
+                    pit_aura.setChild(pit_aura_range)
+                    local droppedcashaura = toggle("Auras", "Dropped Cash Aura", callback.droppedcashaura, true)
+                    local droppedcashrange = slider("Auras", "Range", 1, 25, callback.droppedcashrange)
+                    droppedcashaura.setChild(droppedcashrange)
+                    local playsounds = dropdown("PlaySounds", "Sounds", {}, callback.playsounds)
+                    local annoyserver = toggle("PlaySounds", "Annoy Server", callback.annoyserver)
+                    function callback.rocket_trail(bool)
+                        global.ui_status.rocket_trail = bool
+                    end
+                    function callback.spawn_rocket()
+                        if global._loaded then
+                            global.registry.spawn_rocket(players.LocalPlayer.Name)
+                        end
+                    end
+                    function callback.spawn_rocket_on(name)
+                        if global._loaded then
+                            global.registry.spawn_rocket(name)
+                        end
+                    end
+                    function callback.rocket_explosion(bool)
+                        global.ui_status.rocket_explosion = bool
+                    end
+                    function callback.spawn_explosion()
+                        if global._loaded then
+                            global.registry.spawn_rocket(players.LocalPlayer.Name, true)
+                        end
+                    end
+                    function callback.spawn_explosion_on(name)
+                        if global._loaded then
+                            global.registry.spawn_rocket(name, true)
+                        end
+                    end
+                    function callback.explosion_size(num)
+                        global.ui_status.explosion_size = num
+                    end
+                    local rocket_trail = toggle("RocketFun", "Rocket Trail", callback.rocket_trail, true)
+                    local spawn_rocket = button("RocketFun", "Spawn Rocket", callback.spawn_rocket)
+                    local spawn_rocket_on = textbox("RocketFun", "Spawn Rocket On", "Player Name", callback.spawn_rocket_on)
+                    rocket_trail.setChild(spawn_rocket)
+                    rocket_trail.setChild(spawn_rocket_on)
+                    local rocket_explosion = toggle("RocketFun", "Rocket Explosion", callback.rocket_explosion, true)
+                    local spawn_explosion = button("RocketFun", "Spawn Explosion", callback.spawn_explosion)
+                    local spawn_explosion_on = textbox("RocketFun", "Spawn Explosion On", "Player Name", callback.spawn_explosion_on)
+                    local explosion_size = slider("RocketFun", "Explosion Size", 1, 100, callback.explosion_size)
+                    rocket_explosion.setChild(spawn_explosion)
+                    rocket_explosion.setChild(spawn_explosion_on)
+                    rocket_explosion.setChild(explosion_size)
+                    config.rocket_explosion = rocket_explosion
+                    config.rocket_trail = rocket_trail
+                    config.spawn_rocket = spawn_rocket
+                    config.extend_duration = extend_duration
+                    config.explosion_size = explosion_size
+                    function callback.bomb_vest(bool)
+                        global.ui_status.bomb_vest = bool
+                    end
+                    function callback.spawn_vest()
+                    
+                    end
+                    function callback.spawn_vest_player()
+                    end
+                    function callback.ammo_purchase_limit(num)
+                        global.ui_status.ammo_purchase_limit = num
+                    end
+                    local c4dick_masterswitch = toggle("C4Fun", "C4 Dick", callback.c4dick_masterswitch, true)
+                    local spawn_dick = button("C4Fun", "Spawn Dick", callback.spawn_dick)
+                    local override_length = toggle("C4Fun", "Override Length", callback.override_length, true)
+                    local dick_length = slider("C4Fun", "Dick Length", 1, 6, callback.dick_length)
+                    local dick_player = textbox("C4Fun", "Spawn Dick On", "Player Name", callback.dick_player)
+                    local bomb_vest = toggle("C4Fun", "Bomb Vest", callback.bomb_vest, true)
+                    local spawn_vest = button("C4Fun", "Spawn Vest", callback.spawn_vest)
+                    local spawn_vest_player = textbox("C4Fun", "Spawn Vest On", "Player Name", callback.spawn_vest_player)
+                    local ammo_purchase_limit = slider("C4Fun", "Ammo Purchase Limit", 1, 10, callback.ammo_purchase_limit)
+                    bomb_vest.setChild(spawn_vest)
+                    bomb_vest.setChild(spawn_vest_player)
+                    bomb_vest.setChild(ammo_purchase_limit)
+                    c4dick_masterswitch.setChild(spawn_dick)
+                    c4dick_masterswitch.setChild(dick_player)
+                    c4dick_masterswitch.setChild(override_length)
+                    override_length.setChild(dick_length)
+                    config.override_length = override_length
+                    config.break_maximum_security_elevator = break_maximum_security_elevator
+                    config.dick_length = dick_length
+                    config.dick_player = dick_player
+                    function callback.disable_radio_keybind(bool)
+                        global.ui_status.disable_radio_keybind = bool
+                    end
+                    local disable_lasers = toggle("Disablers", "Disable Lasers", callback.disable_lasers)
+                    local disable_cameras = toggle("Disablers", "Disable Cameras", callback.disable_cameras)
+                    local disable_radio_keybind = toggle("Disablers", "Disable Radio Keybind", callback.disable_radio_keybind)
+                    local disable_spotlight_tracking = toggle("Disablers", "Disable Spotlight Tracking", callback.disable_spotlight_tracking)
+                    local disable_minimap_flash = toggle("Disablers", "Disable Minimap Flash", callback.disable_minimap_flash)
+                    local disable_automatic_unparachute = toggle("Disablers", "Disable Automatic Unparachute", callback.disable_automatic_unparachute)
+                    local disable_military_turrets = toggle("Disablers", "Disable Military Turrets", callback.disable_military_turrets)
+                    local disable_home_turrets = toggle("Disablers", "Disable Home Turrets", callback.disable_home_turrets)
+                    local disable_smoke_grenade_effect = toggle("Disablers", "Disable Smoke Grenade Effect", callback.disable_smoke_grenade_effect)
+                    config.disable_radio_keybind = disable_radio_keybind
+                    config.c4dick_masterswitch = c4dick_masterswitch
+                    config.disable_spotlight_tracking = disable_spotlight_tracking
+                    config.always_reequip_c4 = always_reequip_c4
+                    config.place_waypoint = place_waypoint
+                    config.clicklightning = clicklightning
+                    config.pit_aura = pit_aura
+                    config.pit_aura_range = pit_aura_range
+                    config.disable_minimap_flash = disable_minimap_flash
+                    config.clicknuke = clicknuke
+                    config.auto_accept_battle = auto_accept_battle
+                    config.auto_start_matchmaking = auto_start_matchmaking
+                    config.only_on_weapon_equipped = only_on_weapon_equipped
+                    config.instant_break = instant_break
+                    config.target_enemy_team_only = target_enemy_team_only
+                    config.chatspy = chatspy
+                    config.playsounds = playsounds
+                    config.always_keycard = always_keycard
+                    config.annoyserver = annoyserver
+                    config.master_switch_open_doors = master_switch_open_doors
+                    config.disable_automatic_unparachute = disable_automatic_unparachute
+                    config.break_vehicles = break_vehicles
+                    config.no_equip_conditions = no_equip_conditions
+                    config.master_switch_no_circle_delay = master_switch_no_circle_delay
+                    config.never_unload_world = never_unload_world
+                    config.rainbowbullets = rainbowbullets
+                    config.infinite_jetpack_fuel = infinite_jetpack_fuel
+                    config.pickpocketaura = pickpocketaura
+                    config.master_switch_breakout_aura = master_switch_breakout_aura
+                    config.range_breakoutaura = range_breakoutaura
+                    config.automatic_open_front_gates = automatic_open_front_gates
+                    config.automatic_open_side_gate = automatic_open_side_gate
+                    config.automatic_open_main_gate = automatic_open_main_gate
+                    config.automatic_open_yard_gates = automatic_open_yard_gates
+                    config.open_secretbases = open_secretbases
+                    config.automatic_open_cells = automatic_open_cells
+                    config.range_pickpocketaura = range_pickpocketaura
+                    config.automatic_punch_electric_gate = automatic_punch_electric_gate
+                    config.master_switch_eject_aura = master_switch_eject_aura
+                    config.range_ejectaura = range_ejectaura
+                    config.droppedcashaura = droppedcashaura
+                    config.droppedcashrange = droppedcashrange
+                    config.disable_lasers = disable_lasers
+                    config.disable_cameras = disable_cameras
+                    config.disable_home_turrets = disable_home_turrets
+                    config.disable_military_turrets = disable_military_turrets
+                    config.disable_smoke_grenade_effect = disable_smoke_grenade_effect
+                end
+                local function combat()
+                    function callback.open_gunstore_ui(bool)
+                        global.ui_status.open_gunstore_ui = bool
+                    end
+                    function callback.equip_owned_guns()
+                        local isProjectile = global.registry.isProjectile
+                        if global._loaded then
+                            local client = global.registry.client
+                            local equipOwnedItem = global.registry.equipOwnedItem
+                            if equipOwnedItem then
+                                for i,v in next, client.reg.resolveOwnedItems do
+                                    if not isProjectile(v) then
+                                        equipOwnedItem(v)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    function callback.always_equip_owned_guns(bool)
+                        global.ui_status.always_equip_owned_guns = bool
+                    end
+                    function callback.spam_drop_guns(bool)
+                        global.ui_status.spam_drop_guns = bool
+                    end
+                    function callback.automatic_fire(bool)
+                        global.ui_status.automatic_fire = bool
+                    end
+                    function callback.no_recoil(bool)
+                        global.ui_status.no_recoil = bool
+                    end
+                    function callback.master_switch_silentaim(bool)
+                        global.ui_status.master_switch_silentaim = bool
+                    end
+                    function callback.target_closest_crosshair(bool)
+                        global.ui_status.target_closest_crosshair = bool
+                    end
+                    function callback.always_predict(bool)
+                        global.ui_status.always_predict = bool
+                    end
+                    function callback.master_switch_arrestaura(bool)
+                        global.ui_status.master_switch_arrestaura = bool
+                    end
+                    function callback.range_arrestaura(num)
+                        global.ui_status.range_arrestaura = num
+                    end
+                    function callback.allow_target_prisoner(bool)
+                        global.ui_status.allow_target_prisoner = bool
+                    end
+                    function callback.fov_silentaim(num)
+                        global.ui_status.fov_silentaim = num
+                    end
+                    function callback.fov_circle(bool)
+                        global.ui_status.fov_circle = bool
+                    end
+                    function callback.automatic_equip_handcuffs(bool)
+                        global.ui_status.automatic_equip_handcuffs = bool
+                    end
+                    function callback.automatic_eject_player(bool)
+                        global.ui_status.automatic_eject_player = bool
+                    end
+                    function callback.talk_on_arrest(bool)
+                        global.ui_status.talk_on_arrest = bool
+                    end
+                    function callback.no_wall_penetration(bool)
+                        global.ui_status.no_wall_penetration = bool
+                    end
+                    function callback.allow_target_npcs(bool)
+                        global.ui_status.allow_target_npcs = bool
+                    end
+                    function callback.allow_tase_target(bool)
+                        global.ui_status.allow_tase_target = bool
+                    end
+                    function callback.through_walls(bool)
+                        global.ui_status.through_walls = bool
+                    end
+                    function callback.anti_flintlock_knockback(bool)
+                        global.ui_status.anti_flintlock_knockback = bool
+                    end
+                    function callback.allow_target_boss(bool)
+                        global.ui_status.allow_target_boss = bool
+                    end
+                    function callback.always_target_boss_head(bool)
+                        global.ui_status.always_target_boss_head = bool
+                    end
+                    function callback.instant_reload(bool)
+                        global.ui_status.instant_reload = bool
+                    end
+                    function callback.anti_scope_ui(bool)
+                        global.ui_status.anti_scope_ui = bool
+                    end
+                    function callback.allow_taser_aimbot(bool)
+                        global.ui_status.allow_taser_aimbot = bool
+                    end
+                    function callback.ignore_while_driving(bool)
+                        global.ui_status.ignore_while_driving = bool
+                    end
+                    function callback.automatic_fix_robbery_bag(bool)
+                        global.ui_status.automatic_fix_robbery_bag = bool
+                    end
+                    function callback.instant_seek(bool)
+                        global.ui_status.instant_seek = bool
+                    end
+                    function callback.equip_guns(value)
+                        if global._loaded then
+                            local client = global.registry.client
+                            local equipOwnedItem = global.registry.equipOwnedItem
+                            if equipOwnedItem then
+                                if not table.find(client.reg.resolveEquippedItems, value) then
+                                    equipOwnedItem(value)
+                                end
+                            end
+                        end
+                    end
+                    function callback.extended_aimbot_range(bool)
+                        global.ui_status.extended_aimbot_range = bool
+                    end
+                    function callback.range_taseaura(num)
+                        global.ui_status.range_taseaura = num
+                    end
+                    function callback.wallbang(bool)
+                        global.ui_status.wallbang = bool
+                    end
+                    function callback.move_camera_killall(bool)
+                        global.ui_status.move_camera_killall = bool
+                    end
+                    function callback.ignoreteam_killall(bool)
+                        global.ui_status.ignoreteam_killall = bool
+                    end
+                    function callback.max_distance(num)
+                        global.ui_status.max_distance = num
+                    end
+                    function callback.automatic_shoot(bool)
+                        global.ui_status.automatic_shoot = bool
+                    end
+                    function callback.no_spread(bool)
+                        global.ui_status.no_spread = bool
+                    end
+                    function callback.kill_player(name)
+                        if global._loaded then
+                            global.registry.kill_player(name)
+                        end
+                    end
+                    function callback.anti_smoke_throw_limit(bool)
+                        global.ui_status.anti_smoke_throw_limit = bool
+                    end
+                    function callback.quickfire(bool)
+                        global.ui_status.quickfire = bool
+                    end
+                    function callback.kill_all_in_vehicle(bool)
+                        global.ui_status.kill_all_in_vehicle = bool
+                    end
+                    function callback.teleport_locations(key)
+                        if global._loaded then
+                            global.teleports.setLocation(key)
+                        end
+                    end
+                    local automatic_fire = toggle("Gunmods", "Automatic Fire", callback.automatic_fire)
+                    local no_recoil = toggle("Gunmods", "No Recoil", callback.no_recoil)
+                    local no_spread = toggle("Gunmods", "No Spread", callback.no_spread)
+                    local wallbang = toggle("Gunmods", "Wallbang", callback.wallbang)
+                    local instant_reload = toggle("Gunmods", "Instant Reload", callback.instant_reload)
+                    local instant_seek = toggle("Gunmods", "Instant Seek", callback.instant_seek)
+                    local quickfire = toggle("GunmodsMisc", "Quick Fire", callback.quickfire)
+                    local anti_flintlock_knockback = toggle("GunmodsMisc", "Anti Knockback", callback.anti_flintlock_knockback)
+                    local anti_smoke_throw_limit = toggle("GunmodsMisc", "Anti Smoke Throw Limit", callback.anti_smoke_throw_limit)
+                    local anti_scope_ui = toggle("GunmodsMisc", "Anti Scope UI", callback.anti_scope_ui)
+                    config.quickfire = quickfire
+                    local open_gunstore_ui = toggle("Gunstore", "Open Gunstore UI", callback.open_gunstore_ui)
+                    local equip_owned_guns = button("Gunstore", "Equip Owned Guns", callback.equip_owned_guns)
+                    local equip_guns = dropdown("Gunstore", "Equip Guns", {}, callback.equip_guns)
+                    local always_equip_owned_guns = toggle("Gunstore", "Always Equip Owned Guns", callback.always_equip_owned_guns)
+                    local spam_drop_guns = toggle("Gunstore", "Spam Drop Items", callback.spam_drop_guns, true)
+                    function callback.kill_all_in_vehicle(bool)
+                        global.ui_status.kill_all_in_vehicle = bool
+                    end
+                    function callback.kill_all_vehicle_ignore_teammates(bool)
+                        global.ui_status.kill_all_vehicle_ignore_teammates = bool
+                    end
+                    local kill_player = textbox("BreakExperience", "Attempt Kill Player", "Player Name", callback.kill_player)
+                    function callback.teleport_player(name)
+                        if global._loaded then
+                            global.teleports.teleport_player(name)
+                        end
+                    end
+                    function callback.force_target(name)
+                        if global._loaded then
+                            if global.aimbot then
+                                global.aimbot.setTarget(name)
+                            end
+                        end
+                    end
+                    function callback.killaura_masterswitch(bool)
+                        global.ui_status.killaura_masterswitch = bool
+                    end
+                    function callback.killaura_range(num)
+                        global.ui_status.killaura_range = num
+                    end
+                    local teleport_locations = dropdown("BreakExperience", "Teleport Locations", {"Casino", "Diamonds", "Lava", "Bossroom", "Powerplant", "Bank", "Computer", "Museum", "Jewelry"}, callback.teleport_locations)
+                    local teleport_current_location = label("BreakExperience", "SELECTED_LOCATION", Color3.fromRGB(200, 200, 200))
+                    local teleport_player = textbox("BreakExperience", "Teleport Player", "Player Name", callback.teleport_player)
+                    local kill_all_in_vehicle = toggle("BreakExperience", "Kill All In Vehicle", callback.kill_all_in_vehicle, true)
+                    local kill_all_vehicle_ignore_teammates = toggle("BreakExperience", "Ignore Teammates", callback.kill_all_vehicle_ignore_teammates)
+                    config.kill_all_vehicle_ignore_teammates = kill_all_vehicle_ignore_teammates
+                    kill_all_in_vehicle.setChild(kill_all_vehicle_ignore_teammates)
+                    local killaura_masterswitch = toggle("Killaura", "Master Switch", callback.killaura_masterswitch, true)
+                    local killaura_range = slider("Killaura", "Range", 50, 100, callback.killaura_range)
+                    killaura_masterswitch.setChild(killaura_range)
+                    config.killaura_masterswitch = killaura_masterswitch
+                    config.killaura_range = killaura_range
+                    local master_switch_silentaim = toggle("Silentaim", "Master Switch", callback.master_switch_silentaim, true)
+                    local fov_silentaim = slider("Silentaim", "FOV", 1, 600, callback.fov_silentaim)
+                    local max_distance = slider("Silentaim", "Max Distance", 500, 5000, callback.max_distance)
+                    local force_target = textbox("Silentaim", "Force Target", "Player Name", callback.force_target)
+                    local selected_target = label("Silentaim", "FORCED_TARGET_NAME", Color3.fromRGB(200, 200, 200))
+                    master_switch_silentaim.setChild(force_target)
+                    master_switch_silentaim.setChild(selected_target)
+                    local automatic_shoot = toggle("Silentaim", "Automatic Shoot", callback.automatic_shoot)
+                    local fov_circle = toggle("Silentaim", "FOV Circle", callback.fov_circle)
+                    local always_predict = toggle("Silentaim", "Movement Prediction", callback.always_predict, true)
+                    local extended_aimbot_range = toggle("Silentaim", "Extended Aimbot Range", callback.extended_aimbot_range)
+                    local allow_taser_aimbot = toggle("Silentaim", "Allow Taser Aimbot", callback.allow_taser_aimbot)
+                    local allow_target_prisoner = toggle("Silentaim", "Allow Target Prisoner", callback.allow_target_prisoner)
+                    local allow_target_npcs = toggle("Silentaim", "Allow Target NPCs", callback.allow_target_npcs)
+                    local allow_target_boss = toggle("Silentaim", "Allow Target Boss", callback.allow_target_boss, true)
+                    local always_target_boss_head = toggle("Silentaim", "Head Only", callback.always_target_boss_head)
+                    local no_wall_penetration = toggle("Silentaim", "No Wall Penetration", callback.no_wall_penetration)
+                    master_switch_silentaim.setChild(fov_silentaim)
+                    master_switch_silentaim.setChild(fov_circle)
+                    master_switch_silentaim.setChild(always_predict)
+                    master_switch_silentaim.setChild(automatic_shoot)
+                    config.automatic_shoot = automatic_shoot
+                    config.instant_seek = instant_seek
+                    config.kill_all_in_vehicle = kill_all_in_vehicle
+                    config.kill_all_vehicle_ignore_teammates = kill_all_vehicle_ignore_teammates
+                    master_switch_silentaim.setChild(extended_aimbot_range)
+                    master_switch_silentaim.setChild(max_distance)
+                    master_switch_silentaim.setChild(allow_taser_aimbot)
+                    master_switch_silentaim.setChild(allow_target_prisoner)
+                    master_switch_silentaim.setChild(allow_target_npcs)
+                    master_switch_silentaim.setChild(allow_target_boss)
+                    allow_target_boss.setChild(always_target_boss_head)
+                    master_switch_silentaim.setChild(no_wall_penetration)
+                    local master_switch_arrestaura = toggle("Arrestaura", "Master Switch", callback.master_switch_arrestaura, true)
+                    local range_arrestaura = slider("Arrestaura", "Range", 1, 20, callback.range_arrestaura)
+                    local ignore_while_driving = toggle("Arrestaura", "Ignore while driving", callback.ignore_while_driving)
+                    local automatic_equip_handcuffs = toggle("Arrestaura", "Automatic Equip Handcuffs", callback.automatic_equip_handcuffs)
+                    local automatic_eject_player = toggle("Arrestaura", "Automatic Eject Player", callback.automatic_eject_player)
+                    local allow_tase_target = toggle("Arrestaura", "Allow Tase Target", callback.allow_tase_target, true)
+                    local through_walls = toggle("Arrestaura", "Allow Through Walls", callback.through_walls)
+                    local talk_on_arrest = toggle("Arrestaura", "Talk on Arrest", callback.talk_on_arrest)
+                    master_switch_arrestaura.setChild(range_arrestaura)
+                    master_switch_arrestaura.setChild(automatic_equip_handcuffs)
+                    master_switch_arrestaura.setChild(automatic_eject_player)
+                    master_switch_arrestaura.setChild(allow_tase_target)
+                    master_switch_arrestaura.setChild(ignore_while_driving)
+                    master_switch_arrestaura.setChild(through_walls)
+                    master_switch_arrestaura.setChild(talk_on_arrest)
+                    config.anti_scope_ui = anti_scope_ui
+                    config.allow_target_boss = allow_target_boss
+                    config.wallbang = wallbang
+                    config.instant_reload = instant_reload
+                    config.always_target_boss_head = always_target_boss_head
+                    config.automatic_fire = automatic_fire
+                    config.no_recoil = no_recoil
+                    config.no_spread = no_spread
+                    config.equip_guns = equip_guns
+                    config.ignoreteam_killall = ignoreteam_killall
+                    config.ignorevehicles_killall = ignorevehicles_killall
+                    config.max_distance = max_distance
+                    config.master_switch_silentaim = master_switch_silentaim
+                    config.fov_silentaim = fov_silentaim
+                    config.fov_circle = fov_circle
+                    config.move_camera_killall = move_camera_killall
+                    config.always_predict = always_predict
+                    config.extended_aimbot_range = extended_aimbot_range
+                    config.always_equip_owned_guns = always_equip_owned_guns
+                    config.spam_drop_guns = spam_drop_guns
+                    config.anti_smoke_throw_limit = anti_smoke_throw_limit
+                    config.allow_target_npcs = allow_target_npcs
+                    config.no_wall_penetration = no_wall_penetration
+                    config.allow_target_prisoner = allow_target_prisoner
+                    config.anti_flintlock_knockback = anti_flintlock_knockback
+                    config.master_switch_arrestaura = master_switch_arrestaura
+                    config.allow_taser_aimbot = allow_taser_aimbot
+                    config.range_arrestaura = range_arrestaura
+                    config.automatic_equip_handcuffs = automatic_equip_handcuffs
+                    config.allow_tase_target = allow_tase_target
+                    config.attempt_fling = attempt_fling
+                    config.through_walls = through_walls
+                    config.automatic_eject_player = automatic_eject_player
+                    config.talk_on_arrest = talk_on_arrest
+                    config.ignore_while_driving = ignore_while_driving
+                end
+                local function markers()
+                    function callback.master_switch_marker(bool)
+                        global.ui_status.master_switch_marker = bool
+                    end
+                    function callback.police_marker(bool)
+                        global.ui_status.allow_police_marker = bool
+                    end
+                    function callback.criminal_marker(bool)
+                        global.ui_status.allow_criminal_marker = bool
+                    end
+                    function callback.prisoner_marker(bool)
+                        global.ui_status.allow_prisoner_marker = bool
+                    end
+                    function callback.airdrop_marker(bool)
+                        global.ui_status.allow_airdrop_marker = bool
+                    end
+                    function callback.allow_football_marker(bool)
+                        global.ui_status.allow_football_marker = bool
+                    end
+                    function callback.allow_hackable_computer_marker(bool)
+                        global.ui_status.allow_hackable_computer_marker = bool
+                    end
+                    function callback.no_robberymarker_delay(bool)
+                        global.ui_status.no_robberymarker_delay = bool
+                    end
+                    function callback.allow_npcs_marker(bool)
+                        global.ui_status.allow_npcs_marker = bool
+                    end
+                    function callback.mark_bounty_criminals(bool)
+                        global.ui_status.mark_bounty_criminals = bool
+                    end
+                    function callback.mark_forced_target(bool)
+                        global.ui_status.mark_forced_target = bool
+                    end
+                    local master_switch_marker = toggle("Marker", "Master Switch", callback.master_switch_marker)
+                    local allow_criminal_marker = toggle("Teams", "Allow Criminal Marker", callback.criminal_marker)
+                    local allow_prisoner_marker = toggle("Teams", "Allow Prisoner Marker", callback.prisoner_marker)
+                    local allow_police_marker = toggle("Teams", "Allow Police Marker", callback.police_marker)
+                    local allow_airdrop_marker = toggle("Objects", "Allow Airdrop Marker", callback.airdrop_marker)
+                    local allow_football_marker = toggle("Objects", "Allow Football Marker", callback.allow_football_marker)
+                    local allow_npcs_marker = toggle("Objects", "Allow NPCs Marker", callback.allow_npcs_marker)
+                    local no_robberymarker_delay = toggle("Settings", "No Robbery Marker Delay", callback.no_robberymarker_delay)
+                    local mark_bounty_criminals = toggle("Settings", "Mark Bounty Criminals", callback.mark_bounty_criminals)
+                    local mark_forced_target = toggle("Settings", "Mark Forced Target", callback.mark_forced_target)
+                    config.mark_forced_target = mark_forced_target
+                    config.master_switch_marker = master_switch_marker
+                    config.allow_criminal_marker = allow_criminal_marker
+                    config.allow_prisoner_marker = allow_prisoner_marker
+                    config.allow_police_marker = allow_police_marker
+                    config.allow_airdrop_marker = allow_airdrop_marker
+                    config.allow_football_marker = allow_football_marker
+                    config.allow_npcs_marker = allow_npcs_marker
+                    config.no_robberymarker_delay = no_robberymarker_delay
+                    config.mark_bounty_criminals = mark_bounty_criminals
+                end
+                local function robbery()
+                    local function bank()
+                        function callback.auto_touch_vault(bool)
+                            global.ui_status.auto_touch_vault = bool
+                        end
+                        function callback.auto_place_dynamite(bool)
+                            global.ui_status.auto_place_dynamite = bool
+                        end
+                        function callback.open_entrance_doors(bool)
+                            if global._loaded then
+                                local openBankEntrances = global.registry.openBankEntrances
+                                if openBankEntrances then
+                                    openBankEntrances()
+                                else
+                                    global.notify("Feature not implemented.", 5)
+                                end
+                            end
+                        end
+                        local status = label("Bank", "Bank Status", Color3.fromRGB(0, 0, 0))
+                        local status2 = label("Bank", "BANK2_ROBBERY_STATUS", Color3.fromRGB(0,0,0))
+                        local auto_touch_vault = toggle("Bank", "Automatic Touch Vault", callback.auto_touch_vault)
+                        local auto_place_dynamite = toggle("Bank", "Automatic Place Dynamite", callback.auto_place_dynamite)
+                        local open_entrance_doors = button("Bank", "Open Entrance Doors", callback.open_entrance_doors)
+                        config.auto_touch_vault = auto_touch_vault
+                        config.auto_place_dynamite = auto_place_dynamite
+                        config.open_entrance_doors = open_entrance_doors
+                    end
+                    bank()
+                    local function banktruck()
+                        function callback.automatic_explode_truck(bool)
+                            global.ui_status.automatic_explode_truck = bool
+                        end
+                        local status = label("BankTruck", "Banktruck Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_explode_truck = toggle("BankTruck", "Automatic Explode Truck", callback.automatic_explode_truck)
+                        config.automatic_explode_truck = automatic_explode_truck
+                    end
+                    banktruck()
+                    local function smallstores()
+                        local donut = label("SmallStores", "Donut Shop", Color3.fromRGB(0, 0, 0))
+                        local gas = label("SmallStores", "Gas Station", Color3.fromRGB(0, 0, 0))
+                    end
+                    smallstores()
+                    local function jewelry()
+                        function callback.automatic_grab_nearby_jewels(bool)
+                            global.ui_status.automatic_grab_nearby_jewels = bool
+                        end
+                        function callback.automatic_punch_jewelry_boxes(bool)
+                            global.ui_status.automatic_punch_jewelry_boxes = bool
+                        end
+                        local status = label("Jewelry", "Jewelry Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_punch_jewelry_boxes = toggle("Jewelry", "Automatic Punch Boxes", callback.automatic_punch_jewelry_boxes)
+                        local automatic_grab_nearby_jewels = toggle("Jewelry", "Automatic Grab Nearby Jewels", callback.automatic_grab_nearby_jewels)
+                        config.automatic_grab_nearby_jewels = automatic_grab_nearby_jewels
+                        config.automatic_punch_jewelry_boxes = automatic_punch_jewelry_boxes
+                    end
+                    jewelry()
+                    local function museum()
+                        function callback.automatic_place_dynamite(bool)
+                            global.ui_status.automatic_place_dynamite = bool
+                        end
+                        function callback.auto_fill_bag(bool)
+                            global.ui_status.auto_fill_bag = bool
+                        end
+                        function callback.break_museum_puzzle(bool)
+                            global.ui_status.break_museum_puzzle = bool
+                        end
+                        function callback.automatic_resolve_museum_puzzle(bool)
+                            global.ui_status.automatic_resolve_museum_puzzle = bool
+                        end
+                        local status = label("Museum", "Museum Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_resolve_museum_puzzle = toggle("Museum", "Automatic Resolve Puzzle", callback.automatic_resolve_museum_puzzle)
+                        local automatic_place_dynamite = toggle("Museum", "Automatic Place Dynamite", callback.automatic_place_dynamite)
+                        local auto_fill_bag = toggle("Museum", "Automatic Fill Bag", callback.auto_fill_bag)
+                        local break_museum_puzzle = toggle("Museum", "Break Museum Puzzle", callback.break_museum_puzzle)
+                        config.auto_fill_bag = auto_fill_bag
+                        config.automatic_resolve_museum_puzzle = automatic_resolve_museum_puzzle
+                        config.break_museum_puzzle = break_museum_puzzle
+                        config.automatic_place_dynamite = automatic_place_dynamite
+                    end
+                    museum()
+                    local function casino()
+                        function callback.auto_crack_vault(bool)
+                            global.ui_status.auto_crack_vault = bool
+                        end
+                        function callback.auto_collect_cash(bool)
+                            global.ui_status.auto_collect_cash = bool
+                        end
+                        function callback.auto_open_door(bool)
+                            global.ui_status.auto_open_door = bool
+                        end
+                        function callback.auto_open_keycode_door(bool)
+                            global.ui_status.auto_open_keycode_door = bool
+                        end
+                        function callback.break_elevator(bool)
+                            global.ui_status.break_elevator = bool
+                        end
+                        function callback.hack_nearby_computers(bool)
+                            global.ui_status.hack_nearby_computers = bool
+                        end
+                        function callback.reveal_casino_keycode()
+                            local getKeycode = global.registry.getKeycode
+                            if getKeycode then
+                                local keycode = getKeycode()
+                                if keycode ~= "" then
+                                    global.notify(keycode, 10)
+                                end
+                            end
+                        end
+                        function callback.call_elevator_to_floor(cb)
+                            local call_elevator_to_floor = global.registry.call_elevator_to_floor
+                            if call_elevator_to_floor then
+                                call_elevator_to_floor(cb)
+                            end
+                        end
+                        local status = label("Casino", "Casino Status", Color3.fromRGB(0, 0, 0))
+                        local auto_crack_vault = toggle("Casino", "Automatic Crack Vault", callback.auto_crack_vault)
+                        local auto_collect_cash = toggle("Casino", "Automatic Collect Loot", callback.auto_collect_cash)
+                        local auto_open_door = toggle("Casino", "Automatic Open Door", callback.auto_open_door)
+                        local break_elevator = toggle("Casino", "Break Elevator", callback.break_elevator)
+                        local hack_nearby_computers = toggle("Casino", "Hack Nearby Computers", callback.hack_nearby_computers)
+                        local reveal_casino_keycode = button("Casino", "Reveal Keycode", callback.reveal_casino_keycode)
+                        local call_elevator_to_floor = dropdown("Casino", "Call Elevator To Floor", {"The Roof", "Security", "Ground", "Vaults"}, callback.call_elevator_to_floor)
+                        config.auto_crack_vault = auto_crack_vault
+                        config.auto_collect_cash = auto_collect_cash
+                        config.auto_open_door = auto_open_door
+                        config.break_elevator = break_elevator
+                        config.hack_nearby_computers = hack_nearby_computers
+                        config.reveal_casino_keycode = reveal_casino_keycode
+                    end
+                    casino()
+                    local function mansion()
+                        function callback.disable_traps(bool)
+                            global.ui_status.disable_traps = bool
+                        end
+                        function callback.anti_boss_attack(bool)
+                            global.ui_status.anti_boss_attack = bool
+                        end
+                        function callback.anti_boss_ragdoll(bool)
+                            global.ui_status.anti_boss_ragdoll = bool
+                        end
+                        function callback.break_mansion_npcs(bool)
+                            global.ui_status.break_mansion_npcs = bool
+                        end
+                        function callback.automatic_elevator_entry(bool)
+                            global.ui_status.automatic_elevator_entry = bool
+                        end
+                        function callback.allow_on_police_team(bool)
+                            global.ui_status.allow_on_police_team = bool
+                        end
+                        function callback.entry_only_near_elevator(bool)
+                            global.ui_status.entry_only_near_elevator = bool
+                        end
+                        local status = label("Mansion", "Mansion Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_elevator_entry = toggle("Mansion", "Automatic Elevator Entry", callback.automatic_elevator_entry, true)
+                        local allow_on_police_team = toggle("Mansion", "Allow On Police Team", callback.allow_on_police_team)
+                        automatic_elevator_entry.setChild(allow_on_police_team)
+                        local anti_boss_attack = toggle("Mansion", "Anti Boss Attack", callback.anti_boss_attack)
+                        local anti_boss_ragdoll = toggle("Mansion", "Anti Boss Ragdoll", callback.anti_boss_ragdoll)
+                        local break_mansion_npcs = toggle("Mansion", "Break NPCs", callback.break_mansion_npcs)
+                        local disable_traps = toggle("Mansion", "Disable Traps", callback.disable_traps)
+                        config.break_mansion_npcs = break_mansion_npcs
+                        config.disable_traps = disable_traps
+                        config.anti_boss_attack = anti_boss_attack
+                        config.allow_on_police_team = allow_on_police_team
+                        config.anti_boss_ragdoll = anti_boss_ragdoll
+                        config.automatic_elevator_entry = automatic_elevator_entry
+                    end
+                    mansion()
+                    local function powerplant()
+                        function callback.puzzle_resolver(bool)
+                            global.ui_status.puzzle_resolver = bool
+                        end
+                        function callback.disable_piston_damage(bool)
+                            global.ui_status.disable_piston_damage = bool
+                        end
+                        function callback.disable_powerwire_damage(bool)
+                            global.ui_status.disable_powerwire_damage = bool
+                        end
+                        local status = label("Powerplant", "Powerplant Status", Color3.fromRGB(0, 0, 0))
+                        --local puzzle_resolver = toggle("Powerplant", "Automatic Resolve Puzzle", callback.puzzle_resolver)
+                        local disable_piston_damage = toggle("Powerplant", "Disable Piston Damage", callback.disable_piston_damage)
+                        local disable_powerwire_damage = toggle("Powerplant", "Disable Powerwire Damage", callback.disable_powerwire_damage)
+                        --config.puzzle_resolver = puzzle_resolver
+                        config.disable_piston_damage = disable_piston_damage
+                        config.disable_powerwire_damage = disable_powerwire_damage
+                    end
+                    powerplant()
+                    local function airdrop()
+                        function callback.break_npcs(bool)
+                            global.ui_status.break_npcs = bool
+                        end
+                        function callback.automatic_hold(bool)
+                            global.ui_status.automatic_hold = bool
+                        end
+                        local status = label("Airdrop", "Airdrop Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_hold = toggle("Airdrop", "Automatic Hold E", callback.automatic_hold)
+                        local break_npcs = toggle("Airdrop", "Break NPCs", callback.break_npcs)
+                        config.automatic_hold = automatic_hold
+                        config.break_npcs = break_npcs
+                    end
+                    airdrop()
+                    local function cargoplane()
+                        function callback.automatic_inspect_crate(bool)
+                            global.ui_status.automatic_inspect_crate = bool
+                        end
+                        function callback.automatic_open_cargoplane_door(bool)
+                            global.ui_status.automatic_open_cargoplane_door = bool
+                        end
+                        function callback.call_cargoplane()
+                            local callplane = global.registry.callplane
+                            if callplane then
+                                callplane()
+                            end
+                        end
+                        local status = label("Cargoplane", "Cargoplane Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_inspect_crate = toggle("Cargoplane", "Automatic Inspect Crate", callback.automatic_inspect_crate)
+                        local automatic_open_cargoplane_door = toggle("Cargoplane", "Automatic Open Door", callback.automatic_open_cargoplane_door)
+                        local call_cargoplane = button("Cargoplane", "Call Cargoplane", callback.call_cargoplane)
+                        config.automatic_inspect_crate = automatic_inspect_crate
+                        config.automatic_open_cargoplane_door = automatic_open_cargoplane_door
+                    end
+                    cargoplane()
+                    local function trains()
+                        function callback.automatic_train_fillbag(bool)
+                            global.ui_status.automatic_train_fillbag = bool
+                        end
+                        function callback.automatic_breach_vault(bool)
+                            global.ui_status.automatic_breach_vault = bool
+                        end
+                        function callback.automatic_delivery(bool)
+                            global.ui_status.automatic_delivery = bool
+                        end
+                        function callback.anti_station_stop(bool)
+                            global.ui_status.anti_station_stop = bool
+                        end
+                        local status = label("Trains", "Trains Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_train_fillbag = toggle("Trains", "Automatic Fill Bag", callback.automatic_train_fillbag)
+                        local automatic_delivery = toggle("Trains", "Automatic Delivery", callback.automatic_delivery)
+                        local automatic_breach_vault = toggle("Trains", "Automatic Breach Vault", callback.automatic_breach_vault)
+                        local anti_station_stop = toggle("Trains", "Anti Station Stop", callback.anti_station_stop)
+                        config.automatic_train_fillbag = automatic_train_fillbag
+                        config.automatic_delivery = automatic_delivery
+                        config.automatic_breach_vault = automatic_breach_vault
+                        config.anti_station_stop = anti_station_stop
+                    end
+                    trains()
+                    local function tomb()
+                        function callback.disable_darts(bool)
+                            global.ui_status.disable_darts = bool
+                        end
+                        function callback.disable_spikes(bool)
+                            global.ui_status.disable_spikes = bool
+                        end
+                        function callback.disable_lava(bool)
+                            global.ui_status.disable_lava = bool
+                        end
+                        function callback.disable_wood(bool)
+                            global.ui_status.disable_wood = bool
+                        end
+                        function callback.automatic_resolve_dart_room(bool)
+                            global.ui_status.automatic_resolve_dart_room = bool
+                        end
+                        local status = label("Tomb", "Tomb Status", Color3.fromRGB(0, 0, 0))
+                        local automatic_resolve_dart_room = toggle("Tomb", "Automatic Resolve Dart Room", callback.automatic_resolve_dart_room)
+                        local disable_darts = toggle("Tomb", "Disable Darts", callback.disable_darts)
+                        local disable_wood = toggle("Tomb", "Disable Wood Damage", callback.disable_wood)
+                        local disable_spikes = toggle("Tomb", "Disable Spike Damage", callback.disable_spikes)
+                        local disable_lava = toggle("Tomb", "Disable Lava Damage", callback.disable_lava)
+                        config.automatic_resolve_dart_room = automatic_resolve_dart_room
+                        config.disable_darts = disable_darts
+                        config.disable_wood = disable_wood
+                        config.disable_spikes = disable_spikes
+                        config.disable_lava = disable_lava
+                    end
+                    tomb()
+                    local function cargoship()
+                        function callback.disable_cargoship_turrets(bool)
+                            global.ui_status.disable_cargoship_turrets = bool
+                        end
+                        function callback.destroy_all_crates(bool)
+                            global.ui_status.destroy_all_crates = bool
+                        end
+                        local status = label("Cargoship", "Cargoship Status", Color3.fromRGB(0, 0, 0))
+                        --local destroy_all_crates = toggle("Cargoship", "Destroy All Crates", callback.destroy_all_crates)
+                        local disable_cargoship_turrets = toggle("Cargoship", "Disable Turrets", callback.disable_cargoship_turrets)
+                        config.disable_cargoship_turrets = disable_cargoship_turrets
+                    end
+                    cargoship()
+                end
+                local function info()
+                    function callback.hideusername(bool)
+                        global.ui_status.hideusername = bool
+                    end
+                    function callback.keybindUI(key)
+                        global.ui_status.keybindUI = key.Name
+                    end
+                    function callback.goto_trade_world()
+                        local generateJobId = global.registry.generateJobId
+                        local jobId = generateJobId(true)
+                        if jobId then
+                            teleportservice:TeleportToPlaceInstance("9780994092", jobId, players.LocalPlayer)
+                        end
+                    end
+                    function callback.join_random_server()
+                        local generateJobId = global.registry.generateJobId
+                        local jobId = generateJobId()
+                        if jobId then
+                            teleportservice:TeleportToPlaceInstance("606849621", jobId, players.LocalPlayer)
+                        end
+                    end
+                    function callback.rejoin()
+                        local jobId = game.JobId
+                        if jobId then
+                            teleportservice:TeleportToPlaceInstance("606849621", jobId, players.LocalPlayer)
+                        end
+                    end
+                    function callback.saveuistatus(bool)
+                        global.ui_status.saveuistatus = bool
+                    end
+                    function callback.lighting_technology(val)
+                        local lighting_technology = global.registry.lighting_technology
+                        if lighting_technology then
+                            lighting_technology(val)
+                        end
+                    end
+                    function callback.refresh_config()
+                        if global._loaded then
+                            global.refresh_config()
+                        end
+                    end
+                    function callback.config_name(name)
+                        if global._loaded then
+                            global.ui_status.config_name = name
+                        end
+                    end
+                    function callback.save_config()
+                        if global._loaded then
+                            global.save_config()
+                        end
+                    end
+                    function callback.load_config(name)
+                        if global._loaded then
+                            global.load_config(name)
+                        end
+                    end
+                    local infolabel = credit("Info", "Credits: alex9#0001 (870050524857258055)")
+                    local infoversion = label("Info", ("Version: v%s-%s"):format(global.version, global.exploit))
+                    local goto_trade_world = button("Info", "Teleport To Trade World", callback.goto_trade_world)
+                    local join_random_server = button("Info", "Join Random Server", callback.join_random_server)
+                    local rejoin = button("Info", "Rejoin", callback.rejoin)
+                    local hideusername = toggle("Info", "Hide UI Username", callback.hideusername)
+                    local saveuistatus = toggle("Info", "Save UI Status", callback.saveuistatus)
+                    local keybindUI = keybind("Info", "UI Toggle Keybind", Enum.KeyCode.X, callback.keybindUI)
+                    local lighting_technology = dropdown("LightingTechnology", "Technology", {"Compatibility", "Future", "ShadowMap", "Voxel"}, callback.lighting_technology)
+                    local load_config = dropdown("Config", "Load Config", {}, callback.load_config)
+                    local current_load = label("Config", "LOADED_CONFIG", Color3.fromRGB(200, 200, 200))
+                    local refresh_config = button("Config", "Refresh", callback.refresh_config)
+                    local config_name = textbox("Config", "Config Name", "name", callback.config_name)
+                    local save_config = button("Config", "Save Config", callback.save_config)
+                    config.hideusername = hideusername
+                    config.saveuistatus = saveuistatus
+                    config.keybindUI = keybindUI
+                    config.load_config = load_config
+                end
+                player()
+                vehicle()
+                misc()
+                combat()
+                markers()
+                robbery()
+                info()
+                global.ui_callbacks = callback
+            end
+            sections()
+            global.ui.markerSection = {
+                teamsSection = teamsSection;
+                objSection = objSection;
+                settingsSection = settingsSection;
+            }
+        end
+        ui()
+        global._LOADED_UI = true 
+        global.features_loaded = true --@ pentru 4.0.9+
+        while true do
+            if global.features_loaded then
+                break
+            end
+            task.wait()
+        end
+    end
+    ui()
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 end
 ON_LOADUP()
 
@@ -98,13 +1842,6 @@ local meta = {
 setmetatable(client, meta)
 
 local function icetrayload()
-    local function executionIdentifier()
-        local executor = identifyexecutor()
-        global.getExecutor = executor
-        global.exploit = executor == "Synapse X" and "synx" or executor == "ScriptWare" and "sw" or executor == "Fluxus" and "fluxus" or "other" 
-        global.version = _version
-    end
-    executionIdentifier()
     local function createRegistry()
         client.modules = {
             math = require(repl.Module.Math);
@@ -392,7 +2129,7 @@ local function icetrayload()
             isfolder = isfolder or unsupported("isfolder");
             decompile = decompile or function() return "nu exista decompiler pe acest executor" end;
             listfiles = listfiles or unsupported("listfiles");
-            set_thread_identity = syn and syn.set_thread_identity or set_thread_identity or unsupported("set_thread_identity");
+            set_thread_identity = syn and syn.set_thread_identity or set_thread_identity or setthreadidentity or unsupported("set_thread_identity");
             drawing = Drawing or unsupported("Drawing");
         }
     end
@@ -485,7 +2222,7 @@ local function icetrayload()
         function warning.start(self)
             local ui = gui:new("ScreenGui", {
                 Name = "warnings";
-                Parent = game:GetService("CoreGui");
+                Parent = "CoreGui";
                 Enabled = false;
                 gui:new("Frame", {
                     Active = true;
@@ -581,7 +2318,7 @@ local function icetrayload()
         end
         client.warningBar = warning:start()
     end
-    warningBar()
+    --warningBar() --@si asta da eroarea "thread cannot modify instance (plugin required)" ceva de genu
     function global.createloop(seconds, callback)
         return interval.every(tonumber(seconds)):connect(callback)
     end
@@ -659,20 +2396,6 @@ local function loadup()
         error("Configuration failure")
     end
     log("starting loadup")
-    global.ui.statusRobberies = {}
-    global.ui.colorForcing = {}
-    global.config = {}
-    global.ui_status = {}
-    local function ui()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/piglex9/icetray4/main/src/ui_features.lua"))()
-        while true do
-            if global.features_loaded then
-                break
-            end
-            task.wait()
-        end
-    end
-    ui()
     local function noVirtualization()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/piglex9/icetray4/main/src/mthooks.lua"))()
         while true do
@@ -3433,7 +5156,7 @@ local function loadup()
             local function arrestCircleUpdate()
                 for i,v in next, getconnections(runservice.Heartbeat) do
                     local func = v.Function
-                    if func and not is_synapse_function(func) then
+                    if func and type(func) == "function" and not is_synapse_function(func) then
                         local con = getconstants(func)
                         if table.find(con, "Team") and table.find(con, "Police") and table.find(con, "OnTeamChanged") then
                             local old = getupvalue(getupvalue(func, 1), 5)
@@ -6069,7 +7792,6 @@ local function loadup()
         end
         npcCorrection()
         local function airdropCorrection()
-            --!!! adauga un check mai incolo daca se opreste, am uitat sa il bag mai de mult nush cum
             local holdEAction
             local actionButtonService = client.modules.actionButtonService
             task.spawn(function()
@@ -6101,14 +7823,27 @@ local function loadup()
                 return false
             end
             local isPlayerNearAirdrop
+            local cache
+            local function loop()
+                if not isPlayerNearAirdrop.obj.Value then
+                    cache:disconnect()
+                    cache = nil
+                    return false
+                end
+                if not holdEAction._pressed then
+                    holdEAction._pressState()
+                end
+            end
             local function tagService()
                 isPlayerNearAirdrop = client.tags.new("isPlayerNearAirdrop", 0, false, function(val)
                     if val then
-                        if not holdEAction._pressed then
-                            holdEAction._pressState()
-                        end
+                        cache = createloop(0, loop)
                     else
                         holdEAction._pressed = false
+                        if cache then
+                            cache:disconnect()
+                            cache = nil
+                        end
                     end
                 end)
             end
@@ -6602,7 +8337,7 @@ local function loadup()
                         end
                         if truck then
                             local backDoorRight = truck:FindFirstChild("BackDoorRight")
-                            if backDoorRight then
+                            if backDoorRight and not truck:FindFirstChild("LockMovement") then
                                 local decal = backDoorRight.Decal
                                 if decal then
                                     local c4s = getC4s()
@@ -6724,14 +8459,35 @@ local function loadup()
             explodeTruck()
             local function bombVest()
                 local isInProcess = false
-                task.spawn(function()
-                    local a;
-                    local b;
-                end)
+                local function spawn_vest(name)
+                    if not ownsC4() then
+                        return global.notify("You do not own C4.", 5)
+                    end
+                    if client.reg.getLocalVehicle then
+                        return global.notify("Get out of the vehicle.", 5)
+                    end
+                    if isInProcess then
+                        return global.notify("Bomb vest spawning is already in process. Wait!", 5)
+                    end
+                    isInProcess = true
+                    local hasC4 = hasC4InInventory()
+                    if not hasC4 then
+                        local c4
+                        while true do
+                            c4 = hasC4InInventory()
+                            if c4 then
+                                break
+                            end
+                            equipOwnedItem("C4")
+                            task.wait(0.2)
+                        end
+                        hasC4 = c4
+                    end
+                end
             end
             bombVest()
             local function kill()
-                local isInProcess = false
+                local isInProcess, kill_started_at = false, tick()
                 local function kill_player(name)
                     if not ownsC4() then
                         return global.notify("You do not own C4.", 5)
@@ -6740,9 +8496,13 @@ local function loadup()
                         return global.notify("Get out of the vehicle.", 5)
                     end
                     if isInProcess then
+                        if tick() - kill_started_at > 10 then
+                            isInProcess = false
+                        end
                         return global.notify("Killing already in process. Wait!", 5)
                     end
                     isInProcess = true
+                    kill_started_at = tick()
                     local hasC4 = hasC4InInventory()
                     if not hasC4 then
                         local c4
@@ -6847,7 +8607,7 @@ local function loadup()
             local function dick()
                 local function dick_player(name)
                     if not ownsC4() then
-                        return global.registry("You do not own C4.", 5)
+                        return global.notify("You do not own C4.", 5)
                     end
                     --creds to Nexus42 and Snipehype200
                     if global.ui_status.c4dick_masterswitch then
@@ -7156,7 +8916,7 @@ local function loadup()
             global.registry.spawn_rocket = spawn_rocket
             local function explode_hook(missile)
                 if missile.obj:FindFirstChild("ShouldInstantExplode") then
-                    missile.obj.CFrame = target.CFrame
+                    missile.obj.CFrame = target.CFrame + Vector3.new(math.random(0, 10), 0, math.random(0, 10))
                     return explode(missile)
                 end
                 if missile.obj:FindFirstChild("ShouldTrail") then
@@ -7166,7 +8926,7 @@ local function loadup()
             end
             local function run_hook(missile)
                 if missile.obj:FindFirstChild("ShouldInstantExplode") then
-                    missile.obj.CFrame = target.CFrame
+                    missile.obj.CFrame = target.CFrame + Vector3.new(math.random(0, 10), 0, math.random(0, 10))
                     return explode(missile)
                 end
                 if missile.obj:FindFirstChild("ShouldTrail") and global.ui_status.rocket_trail then
@@ -8669,6 +10429,28 @@ local function loadup()
                 local vaults = {}
                 local actions = {}
                 local vaultPuzzle = collectionservice:GetTagged("VaultDoorPuzzle")
+                local function onLEDChange(obj, v2, v, model)
+                    if v.puzzle:GetAttribute("VaultHackerId") ~= nil and v.puzzle:GetAttribute("VaultHackerId") ~= player.UserId then
+                        return false
+                    end
+                    if string.find(obj, "BrickColor") then
+                        local led = model.UnlockedLED
+                        if led.BrickColor == BrickColor.new("Lime green") then
+                            v2:Callback(true)
+                        end
+                    end
+                end
+                local function onLightChange(obj, v2, v, model)
+                    if v.puzzle:GetAttribute("VaultHackerId") ~= nil and v.puzzle:GetAttribute("VaultHackerId") ~= player.UserId then
+                        return false
+                    end
+                    if string.find(obj, "BrickColor") then
+                        local light = model.Light
+                        if light.BrickColor == BrickColor.new("Lime green") then
+                            v2:Callback(true)
+                        end
+                    end
+                end
                 local function onInstanceAdded(obj)
                     if obj.Parent.Parent.Name ~= "Vault" then
                         table.insert(vaults, {
@@ -8711,28 +10493,6 @@ local function loadup()
                         })
                     end
                 end 
-                local function onLEDChange(obj, v2, v, model)
-                    if v.puzzle:GetAttribute("VaultHackerId") ~= nil and v.puzzle:GetAttribute("VaultHackerId") ~= player.UserId then
-                        return false
-                    end
-                    if string.find(obj, "BrickColor") then
-                        local led = model.UnlockedLED
-                        if led.BrickColor == BrickColor.new("Lime green") then
-                            v2:Callback(true)
-                        end
-                    end
-                end
-                local function onLightChange(obj, v2, v, model)
-                    if v.puzzle:GetAttribute("VaultHackerId") ~= nil and v.puzzle:GetAttribute("VaultHackerId") ~= player.UserId then
-                        return false
-                    end
-                    if string.find(obj, "BrickColor") then
-                        local light = model.Light
-                        if light.BrickColor == BrickColor.new("Lime green") then
-                            v2:Callback(true)
-                        end
-                    end
-                end
                 task.spawn(function()
                     for i,v in next, vaults do
                         for i2,v2 in next, specs do
@@ -9442,6 +11202,9 @@ local function loadup()
                             if head then
                                 return head
                             end
+                        end
+                        if getTarget.Parent.Name == "GuardsFolder" then
+                            return getTarget.PrimaryPart
                         end
                     end
                     local char = getTarget.Character
@@ -10758,7 +12521,7 @@ local function loadup()
                     if part.Name == "Drop" then
                         task.spawn(function()
                             for i,v in next, global.airdrops_on_map do
-                                if not v:IsDescendantOf(workspace) then -- @ ar trebui sa stearga toate airdropurile din table care nu sunt in workspace
+                                if not v:IsDescendantOf(workspace) then -- @ ar trebui sa stearga toate airdropurile din table care nu mai sunt in workspace
                                     table.remove(global.airdrops_on_map, i)
                                     break
                                 end
@@ -11290,6 +13053,7 @@ local function loadup()
                     while true do
                         if contextModule.status() then
                             contextMessage.close()
+                            break
                         else
                             break
                         end
@@ -11323,7 +13087,6 @@ local function loadup()
             local readfile = global.functions.readfile
             local listfiles = global.functions.listfiles
             local function makeCache()
-                function __getLatestConfigLoaded() return 50 end
                 local function getLatestLoadedConfig()
                     local isfolder = isfolder(cacheFolder)
                     if not isfolder then
@@ -11345,7 +13108,6 @@ local function loadup()
                     global.ui_status.config_name = decoded.cfg
                 end
                 getLatestLoadedConfig()
-                task.spawn(__getLatestConfigLoaded)
             end
             makeCache()
             local function makeConfiguration()
@@ -11489,7 +13251,7 @@ local function loadup()
                             local cfg_name = unpack(cfg_json:split(".json"))
                             table.insert(cfgs, cfg_name)
                         else
-                            log(("Couldn't recognise path: %s. Is this a JSON type file?"):format(v))
+                            print(("Couldn't recognise path: %s. Is this a JSON type file?"):format(v))
                         end
                     end
                     local lcfg = global.config.load_config
@@ -11529,13 +13291,16 @@ local function loadup()
                 end
                 task.wait()
             end
-            pcall(showContextMessage)
+            --[[ NU STERGE!!!!!!!! DA CRASH PE ELECTRON, NU STIU INCA DE CE!
+            pcall(showContextMessage) 
             doFireworks()
+            --]]
         end
         on_loadup()
     end
     on_loadup()
     global.is_stable_version = not IS_NOT_OBFUSCATED
     log(("Loaded ice tray v4 in %s second(s). Build: %s-%s"):format(tostring(math.floor(tick() - execution_time)), global.version, IS_NOT_OBFUSCATED and "debug" or "stable"))
+    --print("sa ajuns la ultima linie din main in:", tostring(math.floor(tick() - execution_time)), "secunde")
 end
 loadup()
