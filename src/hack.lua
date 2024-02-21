@@ -4445,12 +4445,10 @@ local function loadup()
         local function ispointintagCorrection()
             local module = client.modules.tagUtils.isPointInTag
             local function hook(pos, str, ...)
-                local m = module(pos, str, ...)
                 if global.IS_IN_NOCLIP then
-                    return {}
+                    return true
                 end
                 if string.find(debug.traceback(), "Falling") then
-                    print(debug.traceback())
                     if str == "NoFallDamage" then
                         if global.ui_status.antifalldamage then
                             return true
@@ -4461,9 +4459,8 @@ local function loadup()
                             return true
                         end
                     end
-                    return m
                 end
-                return m
+                return module(pos, str, ...)
             end
             client.modules.tagUtils.isPointInTag = hook
         end
