@@ -2219,7 +2219,7 @@ local function getDiscordAvatar()
 end
 
 if discord_id then
-    getDiscordAvatar()
+    --getDiscordAvatar()
 end
 
 if isfile("icetray/resource/avatar.png") then
