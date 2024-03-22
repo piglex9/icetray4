@@ -2170,7 +2170,7 @@ local userId = player.UserId
 local request = request or syn and syn.request
 local getsynasset = getsynasset or getcustomasset
 
-local name = ""
+local name = "debug"
 local asset = ""
 local function getDiscordAvatar()
     local api = "https://discordlookup.mesavirep.xyz/v1/user/" --@https://github.com/mesalytic/discord-lookup-api
